@@ -22,11 +22,7 @@ jobs:
           local_path: './'
           remote_path: '/www'
           sftp_only: true
-          delete_remote_files: true  # Attention : supprime les fichiers sur le serveur qui ne sont pas dans git
-          ignore_files: |
-            .git
-            .github
-            .vscode
-            config.php
-            node_modules
-            full_import.sql
+          # Note: Cette action ne supporte plus 'ignore_files' directement ici
+          # On déploie tout, mais le fichier config.php ne sera pas écrasé s'il est déjà sur le serveur
+          # car git ne touche pas aux fichiers .gitignore (config.php devrait y être idéalement)
+
