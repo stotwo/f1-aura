@@ -19,25 +19,26 @@ jobs:
       - name: Deploy via SFTP
         run: |
           mkdir -p ~/.ssh
-          echo "HOST=${{ secrets.SFTP_SERVER }}" > .sftp_config
-          echo "USER=${{ secrets.SFTP_USERNAME }}" >> .sftp_config
-          echo "PASS=${{ secrets.SFTP_PASSWORD }}" >> .sftp_config
+          HOST="${{ secrets.SFTP_SERVER }}"
+          USER="${{ secrets.SFTP_USERNAME }}"
+          PASS="${{ secrets.SFTP_PASSWORD }}"
           
-          # Read config
-          source .sftp_config
+          echo "Debug: HOST=${HOST} (Length: ${#HOST})"
+          echo "Debug: USER=${USER} (Length: ${#USER})"
+          echo "Debug: PASS=[HIDDEN] (Length: ${#PASS})"
           
-          echo "Adding host key for $HOST..."
-          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts || echo "ssh-keyscan failed but continuing..."
+          if [ -z "$HOST" ]; then
+            echo "ERROR: SFTP_SERVER secret is empty!"
+            exit 1
+          fi
+
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts || true
           
-          echo "Connecting via LFTP..."
           lftp -c "set sftp:auto-confirm yes; \
           set net:timeout 20; \
           set net:max-retries 2; \
           open -u \"$USER\",\"$PASS\" sftp://$HOST; \
           mirror --reverse --verbose --exclude .git/ --exclude .github/ --exclude .vscode/ --exclude config.php --exclude node_modules/ --exclude full_import.sql . /www"
-          
-          # Clean up
-          rm .sftp_config
 
             full_import.sql
 
