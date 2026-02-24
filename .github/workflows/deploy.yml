@@ -4,33 +4,24 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  web-deploy:
-    name: 🎉 Deploy
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: 🚚 Get latest code
+      - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: 📂 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.SFTP_SERVER }}
-          username: ${{ secrets.SFTP_USERNAME }}
-          password: ${{ secrets.SFTP_PASSWORD }}
-          protocol: sftp
-          port: 22
-          local-dir: ./
-          server-dir: /www/
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            .vscode/**
-            full_import.sql
-            config.php
+      - name: Install LFTP
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      - name: Deploy via SFTP
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_SERVER }}
+          SFTP_USER: ${{ secrets.SFTP_USERNAME }}
+          SFTP_PASS: ${{ secrets.SFTP_PASSWORD }}
+        run: |
+          lftp -e "set sftp:auto-confirm yes; open sftp://$SFTP_USER:$SFTP_PASS@$SFTP_HOST; mirror --reverse --delete --verbose --exclude .git/ --exclude .github/ --exclude .vscode/ --exclude config.php --exclude node_modules/ --exclude full_import.sql ./ /www; bye"
             full_import.sql
 
