@@ -26,8 +26,7 @@
         </div>
     </div>
 
-    <!-- Copyright -->
-    <div class="footer-bottom">
-        <p>&copy; <?php echo date('Y'); ?> F1 Aura. Fait avec passion pour les fans.</p>
+    <div class="footer-bottom" style="border-top: none; padding-top: 1rem; margin-top: 0;">
+        <p>&copy; 2026 F1 Aura. Fait avec passion pour les fans.</p>
     </div>
 </footer>

@@ -28,14 +28,14 @@ body {
   line-height: 1.6;
 }
 .main-header {
-  background: rgba(10, 10, 15, 0.8);
+  background: rgba(10, 10, 15, 0.95); /* Increased opacity */
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1rem 0;
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 10000; /* Increased z-index */
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 }
 .header-container {
@@ -90,7 +90,7 @@ body {
     justify-content: center;
     align-items: center;
     gap: 5px;
-    z-index: 1001;
+    z-index: 10001; /* Higher than main-nav (9999) and main-header (10000) */
     width: 45px;
     height: 45px;
     border-radius: 50%;
@@ -122,18 +122,23 @@ body {
     .main-nav {
         position: fixed;
         inset: 0;
-        background: linear-gradient(135deg, rgba(10, 10, 20, 0.98), rgba(20, 20, 30, 0.95));
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(135deg, rgba(8, 8, 12, 0.98), rgba(20, 20, 30, 0.96));
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 2rem;
+        gap: 2.5rem; /* Increased gap */
         transform: translateY(-100%);
         opacity: 0;
-        transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-        backdrop-filter: blur(20px);
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); /* Smoother cubic-bezier */
         visibility: hidden;
-        z-index: 1000;
-        padding-top: 60px; 
+        z-index: 9999;
+        padding-top: 0; /* Center vertically without offset */
     }
     .main-nav.active {
         transform: translateY(0);
@@ -141,14 +146,33 @@ body {
         visibility: visible;
     }
     .nav-link { 
-        font-size: 2rem; 
-        font-weight: 800;
+        font-size: 1.8rem; /* Slightly smaller for elegance */
+        font-weight: 700;
         color: #fff;
         transform: translateY(20px);
         opacity: 0;
         transition: 0.3s;
         text-transform: uppercase;
         letter-spacing: 2px;
+        position: relative;
+    }
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -5px;
+        left: 50%;
+        background-color: var(--primary-color);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+    .nav-link:hover::after {
+        width: 100%;
+    }
+    .nav-link:hover {
+        color: var(--primary-color);
+        transform: scale(1.05); /* Subtle scale on hover */
     }
     .btn-login, .btn-logout {
         font-size: 1.2rem;
@@ -308,13 +332,27 @@ body {
 }
 .hero-section {
   text-align: center;
-  padding: 12rem 2rem;
+  padding: 2rem;
+  min-height: 100vh; /* Prend toute la hauteur de l'écran */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)),
     url("https://cdn.prod.website-files.com/67ab23d0fbb5b24523b79712/68b14fad474a98171cb16320_Ferrari-3_4-Angle.jpeg");
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  background-attachment: fixed; /* Parallaxe sur PC */
   position: relative;
+}
+
+/* Fix mobile: pas de parallaxe car instable parfois */
+@media (max-width: 768px) {
+    .hero-section {
+        background-attachment: scroll;
+        height: 100vh; /* Force height sur mobile */
+        min-height: -webkit-fill-available; /* Pour Safari iOS */
+    }
 }
 .hero-title {
   font-size: 3.5rem;
@@ -1067,11 +1105,11 @@ body {
 
 /* Footer Bottom */
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.05); /* Softer line */
-  padding: 1.5rem 0;
-  margin-top: 3rem;
+  border-top: none;
+  padding: 1rem 0 2rem;
+  margin-top: 0;
   margin-bottom: 0; 
-  background: #0a0a0a;
+  background: transparent;
   display: flex !important;
   justify-content: center; /* Centered content */
   align-items: center;
