@@ -2,8 +2,6 @@
 
 Bienvenue sur le dépôt **F1 Aura**, une plateforme web dédiée aux passionnés de Formule 1. Ce projet permet de suivre l'actualité, le calendrier, les résultats des courses et bien plus encore pour la saison 2025 et au-delà.
 
-![F1 Aura Logo](PICS/logo.png)
-
 ## 📌 Fonctionnalités
 
 *   **Actualités F1** : Un fil d'actualités mis à jour régulièrement.
