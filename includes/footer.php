@@ -5,7 +5,7 @@
             <h3 class="footer-logo">F1 AURA</h3>
             <p class="footer-desc">Vivez la passion de la Formule 1 en temps réel. Actualités, résultats et analyses au cœur de la course.</p>
             <div class="footer-social">
-                <a href="https://github.com/stotwo/f1-aura" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://github.com/stotwo/" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
             </div>
         </div>
 
