@@ -24,7 +24,7 @@ jobs:
           lftp -c "set sftp:auto-confirm yes; \
           set net:timeout 20; \
           set net:max-retries 2; \
-          open sftp://${{ secrets.SFTP_USERNAME }}:${{ secrets.SFTP_PASSWORD }}@${{ secrets.SFTP_SERVER }}; \
+          open -u \"${{ secrets.SFTP_USERNAME }}\",\"${{ secrets.SFTP_PASSWORD }}\" sftp://${{ secrets.SFTP_SERVER }}; \
           mirror --reverse --verbose --exclude .git/ --exclude .github/ --exclude .vscode/ --exclude config.php --exclude node_modules/ --exclude full_import.sql . /www"
 
             full_import.sql
