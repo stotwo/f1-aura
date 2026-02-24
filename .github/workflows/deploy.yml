@@ -17,14 +17,18 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y lftp
 
       - name: Deploy via SFTP
+        env:
+          HOST: ${{ secrets.SFTP_SERVER }}
+          USER: ${{ secrets.SFTP_USERNAME }}
+          PASS: ${{ secrets.SFTP_PASSWORD }}
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SFTP_SERVER }} >> ~/.ssh/known_hosts
-          echo "Connecting to ${{ secrets.SFTP_SERVER }}..."
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+          echo "Connecting to $HOST..."
           lftp -c "set sftp:auto-confirm yes; \
           set net:timeout 20; \
           set net:max-retries 2; \
-          open -u \"${{ secrets.SFTP_USERNAME }}\",\"${{ secrets.SFTP_PASSWORD }}\" sftp://${{ secrets.SFTP_SERVER }}; \
+          open -u \"$USER\",\"$PASS\" sftp://$HOST; \
           mirror --reverse --verbose --exclude .git/ --exclude .github/ --exclude .vscode/ --exclude config.php --exclude node_modules/ --exclude full_import.sql . /www"
 
             full_import.sql
