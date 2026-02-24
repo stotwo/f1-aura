@@ -6,3 +6,6 @@
 .idea/**/shelf
 .idea/**/dataSources.local.xml
 .idea/dataSources/
+
+# Configuration (Exclu)
+config.php
