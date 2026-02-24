@@ -35,10 +35,10 @@ jobs:
           ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts || true
           
           lftp -c "set sftp:auto-confirm yes; \
-          set net:timeout 20; \
+          set net:timeout 30; \
           set net:max-retries 2; \
           open -u \"$USER\",\"$PASS\" sftp://$HOST; \
-          mirror --reverse --verbose --exclude .git/ --exclude .github/ --exclude .vscode/ --exclude config.php --exclude node_modules/ --exclude full_import.sql . /www"
+          mirror --reverse --verbose --exclude .git/ --exclude .github/ --exclude .vscode/ --exclude config.php --exclude node_modules/ --exclude full_import.sql . www"
 
             full_import.sql
 
