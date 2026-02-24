@@ -45,6 +45,7 @@ $drivers = $pdo->query("SELECT id, nom, prenom FROM pilotes WHERE prenom != '' A
 <head>
     <meta charset="UTF-8">
     <title>Actualités F1 - Aura</title>
+    <link rel="icon" type="image/png" href="PICS/logo.png">
     <link rel="stylesheet" href="CSS/style.css?v=<?php echo time(); ?>">
     <style>
         .news-container {

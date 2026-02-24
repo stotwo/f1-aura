@@ -1,6 +1,6 @@
 <header class="main-header">
     <div class="header-container">
-        <a href="index.php" class="logo">
+        <a href="./" class="logo">
             <img src="PICS/logo.png" alt="F1 Aura" class="logo-img" style="height: 50px; width: auto; max-width: 100%;">
         </a>
 
@@ -11,7 +11,7 @@
         </button>
 
         <nav class="main-nav">
-            <a href="index.php" class="nav-link">Accueil</a>
+            <a href="./" class="nav-link">Accueil</a>
             <a href="actualites.php" class="nav-link">Actualités</a>
             <a href="calendrier.php" class="nav-link">Calendrier 2026</a>
             <a href="saison_2025.php" class="nav-link">Saison 2025</a>

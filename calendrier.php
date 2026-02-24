@@ -49,6 +49,7 @@ $allPilots = $stmtPilotes->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendrier & Résultats <?= $year ?> - F1 Aura</title>
+    <link rel="icon" type="image/png" href="PICS/logo.png">
     <link rel="stylesheet" href="CSS/style.css?v=<?php echo time(); ?>">
     <style>
         .year-selector {
