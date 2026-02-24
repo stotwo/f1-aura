@@ -17,19 +17,27 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y lftp
 
       - name: Deploy via SFTP
-        env:
-          HOST: ${{ secrets.SFTP_SERVER }}
-          USER: ${{ secrets.SFTP_USERNAME }}
-          PASS: ${{ secrets.SFTP_PASSWORD }}
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
-          echo "Connecting to $HOST..."
+          echo "HOST=${{ secrets.SFTP_SERVER }}" > .sftp_config
+          echo "USER=${{ secrets.SFTP_USERNAME }}" >> .sftp_config
+          echo "PASS=${{ secrets.SFTP_PASSWORD }}" >> .sftp_config
+          
+          # Read config
+          source .sftp_config
+          
+          echo "Adding host key for $HOST..."
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts || echo "ssh-keyscan failed but continuing..."
+          
+          echo "Connecting via LFTP..."
           lftp -c "set sftp:auto-confirm yes; \
           set net:timeout 20; \
           set net:max-retries 2; \
           open -u \"$USER\",\"$PASS\" sftp://$HOST; \
           mirror --reverse --verbose --exclude .git/ --exclude .github/ --exclude .vscode/ --exclude config.php --exclude node_modules/ --exclude full_import.sql . /www"
+          
+          # Clean up
+          rm .sftp_config
 
             full_import.sql
 
