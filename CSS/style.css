@@ -46,6 +46,15 @@ body {
   justify-content: space-between;
   align-items: center;
 }
+@media (max-width: 768px) {
+  .header-container {
+     padding: 0 1.5rem;
+     width: 100%;
+  }
+  .header-right {
+     margin-left: auto; /* Push to right */
+  }
+}
 .logo {
   display: flex;
   align-items: center;
@@ -318,16 +327,21 @@ body {
   margin: 0.25rem 0;
 }
 @media (max-width: 768px) {
-  .user-menu {
-    order: -1;
+  /* Fix user menu on mobile */
+  .user-menu.mobile-user-menu {
+    position: relative; /* Keep it relative */
+    order: 0; /* Natural order */
+    margin-right: -5px; /* Adjust spacing */
   }
+  
   .user-dropdown {
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%) translateY(-10px);
+    right: 0; /* Align right to screen */
+    left: auto;
+    transform: translateY(-10px);
+    width: 250px;
   }
   .user-dropdown.active {
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
   }
 }
 .hero-section {

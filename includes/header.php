@@ -4,23 +4,9 @@
             <img src="PICS/logo.png" alt="F1 Aura" class="logo-img" style="height: 50px; width: auto; max-width: 100%;">
         </a>
 
-        <button class="hamburger" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-
-        <nav class="main-nav">
-            <a href="./" class="nav-link">Accueil</a>
-            <a href="actualites" class="nav-link">Actualités</a>
-            <a href="calendrier" class="nav-link">Calendrier 2026</a>
-            <a href="saison_2025" class="nav-link">Saison 2025</a>
-            <a href="statistiques" class="nav-link">Statistiques</a>
-            
+        <div class="header-right" style="display: flex; align-items: center; gap: 1rem;">
             <?php if (isLoggedIn()): ?>
-                <a href="dashboard.php" class="nav-link">Tableau de Bord</a>
-                
-                <div class="user-menu">
+                <div class="user-menu" style="position: relative;">
                     <button class="user-avatar" aria-label="Menu utilisateur">
                         <span class="avatar-initials">
                             <?php 
@@ -53,6 +39,24 @@
                         </a>
                     </div>
                 </div>
+            <?php endif; ?>
+
+            <button class="hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+
+        <nav class="main-nav">
+            <a href="./" class="nav-link">Accueil</a>
+            <a href="actualites" class="nav-link">Actualités</a>
+            <a href="calendrier" class="nav-link">Calendrier 2026</a>
+            <a href="saison_2025" class="nav-link">Saison 2025</a>
+            <a href="statistiques" class="nav-link">Statistiques</a>
+            
+            <?php if (isLoggedIn()): ?>
+                <a href="dashboard.php" class="nav-link desktop-only" style="display: none;">Tableau de Bord</a>
             <?php else: ?>
                 <a href="connexion.php" class="nav-link btn-login">Connexion</a>
             <?php endif; ?>
