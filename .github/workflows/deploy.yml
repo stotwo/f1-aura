@@ -1,0 +1,32 @@
+name: Deploy to AlwaysData
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          server: ${{ secrets.SFTP_SERVER }}
+          username: ${{ secrets.SFTP_USERNAME }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          port: 22
+          local_path: './'
+          remote_path: '/www'
+          sftp_only: true
+          delete_remote_files: true  # Attention : supprime les fichiers sur le serveur qui ne sont pas dans git
+          ignore_files: |
+            .git
+            .github
+            .vscode
+            config.php
+            node_modules
+            full_import.sql
