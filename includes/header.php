@@ -12,10 +12,10 @@
 
         <nav class="main-nav">
             <a href="./" class="nav-link">Accueil</a>
-            <a href="actualites.php" class="nav-link">Actualités</a>
-            <a href="calendrier.php" class="nav-link">Calendrier 2026</a>
-            <a href="saison_2025.php" class="nav-link">Saison 2025</a>
-            <a href="statistiques.php" class="nav-link">Statistiques</a>
+            <a href="actualites" class="nav-link">Actualités</a>
+            <a href="calendrier" class="nav-link">Calendrier 2026</a>
+            <a href="saison_2025" class="nav-link">Saison 2025</a>
+            <a href="statistiques" class="nav-link">Statistiques</a>
             
             <?php if (isLoggedIn()): ?>
                 <a href="dashboard.php" class="nav-link">Tableau de Bord</a>

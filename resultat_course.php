@@ -234,7 +234,7 @@ if (isset($_SESSION['user_id'])) {
     
     <div class="result-header">
         <div class="container">
-            <a href="calendrier.php" class="btn-back">← Retour calendrier</a>
+            <a href="calendrier" class="btn-back">← Retour calendrier</a>
             <div class="gp-title"><?= htmlspecialchars($course['nom']) ?></div>
             <div class="gp-meta">
                 <span class="gp-date">📅 <?= date('d M Y', strtotime($course['date_course'])) ?></span>
@@ -246,7 +246,7 @@ if (isset($_SESSION['user_id'])) {
     <main class="container">
         <div class="filter-section">
             <?php if ($partner): ?>
-                <a href="resultat_course.php?id=<?= $partner['id'] ?>" class="filter-btn" style="text-decoration: none;">
+                <a href="resultat_course?id=<?= $partner['id'] ?>" class="filter-btn" style="text-decoration: none;">
                     Voir <?= stripos($partner['nom'], 'Sprint') !== false ? 'le Sprint' : 'le Grand Prix' ?>
                 </a>
             <?php endif; ?>
@@ -256,7 +256,7 @@ if (isset($_SESSION['user_id'])) {
 
         <div id="no-favorites-msg" style="display: none; text-align: center; color: #ccc; padding: 3rem; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 2rem;">
             <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">Veuillez ajouter des favoris afin de profiter de cette fonctionnalité !</p>
-            <a href="selection-favoris.php" class="btn btn-primary">Gérer mes favoris</a>
+            <a href="selection-favoris" class="btn btn-primary">Gérer mes favoris</a>
         </div>
 
         <?php if (empty($allPilots)): ?>

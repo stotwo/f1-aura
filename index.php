@@ -18,10 +18,10 @@
             
             <div class="hero-buttons">
                 <?php if (isLoggedIn()): ?>
-                    <a href="dashboard.php" class="btn btn-primary">Mon Tableau de Bord</a>
+                    <a href="dashboard" class="btn btn-primary">Mon Tableau de Bord</a>
                 <?php else: ?>
-                    <a href="inscription.php" class="btn btn-primary">S'inscrire</a>
-                    <a href="connexion.php" class="btn btn-secondary">Se connecter</a>
+                    <a href="inscription" class="btn btn-primary">S'inscrire</a>
+                    <a href="connexion" class="btn btn-secondary">Se connecter</a>
                 <?php endif; ?>
             </div>
         </div>
@@ -32,26 +32,26 @@
             <h2 class="section-title">Découvrez nos fonctionnalités</h2>
             
             <div class="features-grid">
-                <a href="actualites.php" class="feature-card">
+                <a href="actualites" class="feature-card">
                     <div class="feature-icon">📰</div>
                     <h3>Actualités Générales</h3>
                     <p>Restez informé des dernières nouvelles de la F1</p>
                 </a>
 
-                <a href="calendrier.php" class="feature-card">
+                <a href="calendrier" class="feature-card">
                     <div class="feature-icon">🏁</div>
                     <h3>Calendrier & Résultats</h3>
                     <p>Consultez le calendrier et les résultats des courses</p>
                 </a>
 
-                <a href="statistiques.php" class="feature-card">
+                <a href="statistiques" class="feature-card">
                     <div class="feature-icon">📊</div>
                     <h3>Statistiques Interactives</h3>
                     <p>Explorez les graphiques et courbes des performances</p>
                 </a>
 
                 <?php if (isLoggedIn()): ?>
-                <a href="dashboard.php" class="feature-card highlight">
+                <a href="dashboard" class="feature-card highlight">
                     <div class="feature-icon">⭐</div>
                     <h3>Tableau Personnalisé</h3>
                     <p>Suivez vos pilotes et écuries favoris</p>

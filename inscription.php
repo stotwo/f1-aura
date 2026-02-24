@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
 
                 <p class="text-center">
-                    Déjà un compte ? <a href="connexion.php" class="link">Se connecter</a>
+                    Déjà un compte ? <a href="connexion" class="link">Se connecter</a>
                 </p>
             </form>
         </div>
