@@ -6,23 +6,31 @@ on:
       - main
 
 jobs:
-  deploy:
+  web-deploy:
+    name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: 🚚 Get latest code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Deploy to SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.SFTP_SERVER }}
           username: ${{ secrets.SFTP_USERNAME }}
           password: ${{ secrets.SFTP_PASSWORD }}
+          protocol: sftp
           port: 22
-          local_path: './'
-          remote_path: '/www'
-          sftp_only: true
-          # Note: Cette action ne supporte plus 'ignore_files' directement ici
-          # On déploie tout, mais le fichier config.php ne sera pas écrasé s'il est déjà sur le serveur
-          # car git ne touche pas aux fichiers .gitignore (config.php devrait y être idéalement)
+          local-dir: ./
+          server-dir: /www/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            .vscode/**
+            full_import.sql
+            config.php
+            full_import.sql
 
