@@ -5,10 +5,7 @@
             <h3 class="footer-logo">F1 AURA</h3>
             <p class="footer-desc">Vivez la passion de la Formule 1 en temps réel. Actualités, résultats et analyses au cœur de la course.</p>
             <div class="footer-social">
-                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://github.com/stotwo/f1-aura" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
             </div>
         </div>
 
@@ -27,27 +24,10 @@
                 <?php endif; ?>
             </ul>
         </div>
-
-        <!-- Section Newsletter (Nouveau) -->
-        <div class="footer-column footer-newsletter">
-            <h4>Restez informé</h4>
-            <p>Recevez les dernières news F1 directement dans votre boîte mail.</p>
-            <form class="newsletter-form" onsubmit="event.preventDefault();">
-                <input type="email" placeholder="Votre email..." required>
-                <button type="submit"><i class="fas fa-paper-plane"></i></button>
-            </form>
-        </div>
     </div>
 
     <!-- Copyright -->
     <div class="footer-bottom">
-        <div class="copyright">
-            <p>&copy; <?php echo date('Y'); ?> F1 Aura. Fait avec passion pour les fans.</p>
-        </div>
-        <div class="footer-legal">
-            <a href="#">Mentions Légales</a>
-            <a href="#">Confidentialité</a>
-            <a href="#">Cookies</a>
-        </div>
+        <p>&copy; <?php echo date('Y'); ?> F1 Aura. Fait avec passion pour les fans.</p>
     </div>
 </footer>
