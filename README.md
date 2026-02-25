@@ -12,12 +12,3 @@ Bienvenue sur le dépôt **F1 Aura**, une plateforme web dédiée aux passionné
     *   Inscription et Connexion sécurisées.
     *   Dashboard personnalisé.
     *   Sélection de pilotes et écuries favoris pour un flux personnalisé.
-      
-## 🛠️ Stack Technique
-
-*   **Backend** : PHP (Native)
-*   **Base de données** : MySQL
-*   **Frontend** : HTML5, CSS3, JavaScript
-*   **Déploiement** : GitHub Actions (CI/CD) vers AlwaysData via LFTP
----
-*Projet développé dans le cadre de F1-Aura.*
