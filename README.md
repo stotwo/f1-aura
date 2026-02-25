@@ -12,8 +12,7 @@ Bienvenue sur le dépôt **F1 Aura**, une plateforme web dédiée aux passionné
     *   Inscription et Connexion sécurisées.
     *   Dashboard personnalisé.
     *   Sélection de pilotes et écuries favoris pour un flux personnalisé.
-*   **Scraping Automatisé** : Scripts intégrés pour récupérer les derniers résultats (via `scrape_f1_results.php`).
-
+      
 ## 🛠️ Stack Technique
 
 *   **Backend** : PHP (Native)
