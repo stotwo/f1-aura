@@ -12,3 +12,5 @@ Bienvenue sur le dépôt **F1 Aura**, une plateforme web dédiée aux passionné
     *   Inscription et Connexion sécurisées.
     *   Dashboard personnalisé.
     *   Sélection de pilotes et écuries favoris pour un flux personnalisé.
+
+Pour l'instant, ceci est un site que je crée pour un projet scolaire, impliquant le fait de n'utiliser que du php , une fois l'année scolaire finie, je compte bien faire une refont entière du site afin de le rendre le plus beau ! 
