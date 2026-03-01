@@ -120,7 +120,7 @@ if (empty($favoris_pilotes) && empty($favoris_ecuries)) {
                 <?php endif; ?>
             </section>
 
-            <section class="dashboard-card news-feed">
+            <section class="dashboard-card news-feed" style="grid-column: 1 / -1;">
                 <h2>📰 Flux d'actualités personnalisé</h2>
                 <div class="news-list">
                     <?php 
@@ -144,9 +144,29 @@ if (empty($favoris_pilotes) && empty($favoris_ecuries)) {
                         if ($dashboardNews):
                             foreach ($dashboardNews as $news):
                     ?>
-                            <div class="favorite-item" style="cursor: pointer;" onclick="window.open('<?= htmlspecialchars($news['lien']) ?>', '_blank')">
-                                <span class="favorite-label" style="font-size:0.7rem; color:#666;"><?= date('d/m', strtotime($news['date_publication'])) ?></span>
-                                <span class="favorite-value" style="font-weight:500;"><?= htmlspecialchars($news['titre']) ?></span>
+                            <div class="favorite-news-item horizontal-card" onclick="window.open('<?= htmlspecialchars($news['lien']) ?>', '_blank')">
+                                <?php if (!empty($news['image_url'])): ?>
+                                    <div class="news-img-wrapper">
+                                        <img src="<?= htmlspecialchars($news['image_url']) ?>" alt="News" loading="lazy">
+                                    </div>
+                                <?php endif; ?>
+                                <div class="news-content">
+                                    <span class="news-title"><?= htmlspecialchars($news['titre']) ?></span>
+                                    <span class="news-date">
+                                        <?php 
+                                            // Simple "Time Ago" logic
+                                            $time = strtotime($news['date_publication']);
+                                            $diff = time() - $time;
+                                            if ($diff < 3600) {
+                                                echo floor($diff / 60) . ' min ago';
+                                            } elseif ($diff < 86400) {
+                                                echo floor($diff / 3600) . ' hours ago';
+                                            } else {
+                                                echo date('d M Y', $time);
+                                            }
+                                        ?>
+                                    </span>
+                                </div>
                             </div>
                     <?php 
                             endforeach;
@@ -165,9 +185,9 @@ if (empty($favoris_pilotes) && empty($favoris_ecuries)) {
                 </div>
             </section>
 
-            <section class="dashboard-card quick-links">
+            <section class="dashboard-card quick-links" style="grid-column: 1 / -1;">
                 <h2>🔗 Accès Rapide</h2>
-                <div class="quick-links-grid">
+                <div class="quick-links-grid" style="grid-template-columns: repeat(4, 1fr) !important;">
                     <a href="actualites.php" class="quick-link">
                         <span class="quick-link-icon">📰</span>
                         <span>Actualités</span>

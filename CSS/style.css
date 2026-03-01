@@ -32,7 +32,7 @@ body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 1rem 0;
+  padding: 0; /* REMOVED PADDING to use fixed height correctly */
   position: sticky;
   top: 0;
   z-index: 10000; /* Increased z-index */
@@ -632,37 +632,25 @@ body {
   padding: 2rem;
   border-radius: 15px;
   border: 1px solid var(--border-color);
+  display: flex; /* Add flex layout */
+  flex-direction: column; /* Vertical stack */
 }
 .dashboard-card h2 {
   margin-bottom: 1.5rem;
   color: var(--primary-color);
 }
-.favorite-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--border-color);
-}
-.favorite-item:last-child {
-  border-bottom: none;
-}
-.favorite-label {
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
-}
-.favorite-value {
-  color: var(--text-color);
-  font-weight: 500;
-}
+/* ... */
 .quick-links-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    /* Removed flex: 1 to prevent buttons from stretching */
 }
 .quick-link {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; /* Center content vertically */
   gap: 0.5rem;
   padding: 1.5rem;
   background: var(--secondary-color);
@@ -670,6 +658,7 @@ body {
   text-decoration: none;
   color: var(--text-color);
   transition: all 0.3s;
+  /* Removed height: 100% so they don't stretch */
 }
 .quick-link:hover {
   background: var(--primary-color);
@@ -1582,53 +1571,48 @@ body {
     left: 0;
     width: 100%;
     height: 100vh;
-    background: #0a0a0f;
+    background: rgba(10, 10, 15, 0.98); /* Slightly transparent */
+    backdrop-filter: blur(15px);
     z-index: 2000;
     transform: translateX(100%);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    padding: 30px;
+    padding: 20px 30px 40px; /* Adjusted padding */
 }
 
-.mobile-nav-overlay.open {
-    transform: translateX(0);
-}
-
-.mobile-nav-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 40px;
-}
-
-.close-mobile {
-    background: none;
-    border: none;
-    color: var(--text-primary);
-    font-size: 30px;
-    cursor: pointer;
-}
+/* ... existing code ... */
 
 .mobile-links {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    justify-content: center; /* Center links vertically in the available space */
+    flex: 1; /* Take all available space between header and auth */
+    gap: 0; /* Remove gap, use padding on items */
 }
 
 .mobile-links a {
     color: var(--text-primary);
     text-decoration: none;
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 28px; /* Larger text */
+    font-weight: 700;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
+    padding: 20px 0; /* Larger touch targets */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: color 0.3s, padding-left 0.3s;
+}
+
+.mobile-links a:hover, .mobile-links a:active {
+    color: var(--primary-color);
+    padding-left: 10px; /* Slide effect */
 }
 
 .mobile-links a i {
-    width: 30px;
-    color: var(--accent-red);
+    width: 35px;
+    color: var(--primary-color);
+    font-size: 24px;
 }
 
 /* Responsive */
@@ -1676,18 +1660,18 @@ body {
   align-items: center;
   justify-content: center;
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  bottom: 25px; /* Slightly lower */
+  right: 25px; /* Slightly more right */
   z-index: 999;
-  font-size: 20px;
+  font-size: 16px; /* Smaller icon */
   border: none;
   background: var(--primary-color);
   color: #fff;
   cursor: pointer;
   padding: 0;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 40px; /* Reduced from 50px */
+  height: 40px; /* Reduced from 50px */
   box-shadow: 0 4px 15px rgba(227, 6, 19, 0.4);
   transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   opacity: 0;
@@ -1705,5 +1689,163 @@ body {
   background-color: #ff1a29;
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(227, 6, 19, 0.6);
+}
+
+/* Dashboard News Feed Frame Style */
+.favorite-news-item {
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05); /* Slight white tint */
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: block;
+    text-align: left;
+}
+
+.favorite-news-item:last-child {
+    margin-bottom: 0;
+}
+
+.favorite-news-item:hover {
+    background: rgba(255, 255, 255, 0.1); /* Brighter on hover */
+    border-color: var(--primary-color);
+    transform: translateX(5px);
+}
+
+.news-title {
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    display: block; /* Ensure block display for title */
+}
+
+/* Horizontal News Card - F1.com Style (Split Layout 35/65 - Compact) */
+.favorite-news-item.horizontal-card {
+    display: flex !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+    padding: 0 !important;
+    min-height: 100px; /* Reduced height */
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 1rem; /* Reduced spacing */
+}
+
+.news-img-wrapper {
+    flex: 0 0 35% !important; /* Reduced width slightly */
+    max-width: 35% !important;
+    width: 35% !important;
+    height: auto !important;
+    border-radius: 0 !important;
+    overflow: hidden;
+    position: relative;
+    margin: 0 !important;
+    background: #000;
+}
+
+.news-img-wrapper img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center;
+    transition: transform 0.5s ease;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.favorite-news-item:hover .news-img-wrapper img {
+    transform: scale(1.05);
+}
+
+.news-content {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    padding: 0.75rem 1rem !important; /* More compact padding */
+    gap: 0.25rem !important; /* Tighter gap */
+}
+
+.news-title {
+    font-size: 1rem !important; /* Slightly smaller font */
+    font-weight: 700 !important;
+    margin: 0 !important;
+    display: block !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.25 !important;
+    color: var(--text-color) !important;
+}
+
+.news-date {
+    font-size: 0.85rem !important;
+    color: rgba(255,255,255,0.6) !important;
+    font-weight: 500 !important; /* Slightly bolder date */
+    display: block !important;
+    margin-top: auto !important; /* Push to bottom if content stretches */
+    text-transform: uppercase; /* F1 style often uses uppercase for metadata */
+    letter-spacing: 0.5px;
+}
+
+/* FINAL MOBILE FIX - Ultra High Specificity */
+@media (max-width: 768px) {
+    div.favorite-news-item.horizontal-card {
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important; /* Allow content to flow */
+    }
+
+    div.favorite-news-item.horizontal-card .news-img-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 auto !important; /* Don't force height */
+        height: 200px !important;
+        margin: 0 !important;
+        border-radius: 8px 8px 0 0 !important;
+    }
+    
+    div.favorite-news-item.horizontal-card .news-img-wrapper img {
+        height: 100% !important;
+        width: 100% !important;
+        object-fit: cover !important;
+    }
+
+    div.favorite-news-item.horizontal-card .news-content {
+        width: 100% !important;
+        padding: 20px !important;
+        display: block !important;
+        flex: 1 1 auto !important; /* Grow based on content */
+        overflow: visible !important;
+    }
+
+    div.favorite-news-item.horizontal-card .news-title {
+        font-size: 1.1rem !important;
+        line-height: 1.4 !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        display: block !important;
+        -webkit-line-clamp: unset !important; /* Non-standard property removal attempt */
+        -webkit-box-orient: unset !important;
+        max-height: none !important; /* Remove any max-height constraints */
+        margin-bottom: 10px !important;
+    }
+    
+    div.favorite-news-item.horizontal-card .news-date {
+        display: block !important;
+        margin-top: 10px !important;
+    }
 }
 

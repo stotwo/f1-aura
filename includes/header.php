@@ -94,8 +94,6 @@ if (session_status() === PHP_SESSION_NONE) {
     <div class="mobile-links">
         <a href="calendrier.php"><i class="fa-regular fa-calendar-days"></i> Calendrier</a>
         <a href="classements.php?year=2025"><i class="fa-solid fa-trophy"></i> Classement</a>
-        <a href="pilotes.php"><i class="fa-solid fa-user-astronaut"></i> Pilotes</a>
-        <a href="ecuries.php"><i class="fa-solid fa-people-group"></i> Écuries</a>
         <a href="actualites.php"><i class="fa-regular fa-newspaper"></i> Actualités</a>
         <a href="statistiques.php"><i class="fa-solid fa-chart-pie"></i> Statistiques</a>
     </div>
