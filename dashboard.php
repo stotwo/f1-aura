@@ -187,7 +187,7 @@ if (empty($favoris_pilotes) && empty($favoris_ecuries)) {
 
             <section class="dashboard-card quick-links" style="grid-column: 1 / -1;">
                 <h2>🔗 Accès Rapide</h2>
-                <div class="quick-links-grid" style="grid-template-columns: repeat(4, 1fr) !important;">
+                <div class="quick-links-grid">
                     <a href="actualites.php" class="quick-link">
                         <span class="quick-link-icon">📰</span>
                         <span>Actualités</span>
