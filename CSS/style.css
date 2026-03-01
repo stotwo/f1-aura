@@ -1623,7 +1623,30 @@ div.favorite-news-item.horizontal-card .news-content {
     padding: 20px 30px 40px; /* Adjusted padding */
 }
 
-/* ... existing code ... */
+.mobile-nav-overlay.open {
+    transform: translateX(0);
+}
+
+.mobile-nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.mobile-nav-header .brand-text {
+    font-size: 28px;
+}
+
+.close-mobile {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 36px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
 
 .mobile-links {
     display: flex;
