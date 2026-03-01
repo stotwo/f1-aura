@@ -76,7 +76,7 @@ if (empty($favoris_pilotes) && empty($favoris_ecuries)) {
     <main class="dashboard-container">
         <div class="dashboard-header">
             <h1>Bienvenue, <?= htmlspecialchars($_SESSION['user_prenom']) ?> !</h1>
-            <a href="parametres.php" class="btn btn-secondary">⚙️ Modifier mes préférences</a>
+            <a href="parametres.php#mes-pilotes" class="btn btn-secondary">⚙️ Modifier mes préférences</a>
         </div>
 
         <div class="dashboard-grid">
@@ -107,7 +107,7 @@ if (empty($favoris_pilotes) && empty($favoris_ecuries)) {
                         ?>
                             <div class="mini-card">
                                 <?php if ($ecurie['image_url']): ?>
-                                    <img src="<?= htmlspecialchars($ecurie['image_url']) ?>" alt="<?= htmlspecialchars($ecurie['nom']) ?>" style="border-radius: 10px; object-fit: contain; background-color: <?= $teamColor ?>; padding: 0; width: 100%;">
+                                    <img src="<?= htmlspecialchars($ecurie['image_url']) ?>" alt="<?= htmlspecialchars($ecurie['nom']) ?>" style="border-radius: 10px; object-fit: contain; object-position: center; background-color: <?= $teamColor ?>; padding: 10px; width: 100%; height: 100px; border: none;">
                                 <?php endif; ?>
                                 <h4><?= htmlspecialchars($ecurie['nom']) ?></h4>
                             </div>
@@ -116,7 +116,7 @@ if (empty($favoris_pilotes) && empty($favoris_ecuries)) {
                 <?php endif; ?>
                 
                 <?php if (empty($favoris_pilotes) && empty($favoris_ecuries)): ?>
-                    <p style="text-align: center; color: rgba(255,255,255,0.6);">Aucun favoris sélectionné. <a href="parametres.php" class="link">Ajoutez-en maintenant !</a></p>
+                    <p style="text-align: center; color: rgba(255,255,255,0.6);">Aucun favoris sélectionné. <a href="parametres.php#mes-pilotes" class="link">Ajoutez-en maintenant !</a></p>
                 <?php endif; ?>
             </section>
 

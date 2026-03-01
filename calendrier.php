@@ -1,7 +1,10 @@
 <?php
 require_once 'config.php';
 
-$year = 2026;
+$year = isset($_GET['year']) ? (int)$_GET['year'] : 2026;
+if (!in_array($year, [2025, 2026])) {
+    $year = 2026;
+}
 
 $stmt = $pdo->prepare("
     SELECT c.*, 
@@ -51,81 +54,9 @@ $allPilots = $stmtPilotes->fetchAll();
     <title>Calendrier & Résultats <?= $year ?> - F1 Aura</title>
     <link rel="icon" type="image/png" href="PICS/logo.png">
     <link rel="stylesheet" href="CSS/style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="CSS/year_selector.css">
+    <link rel="stylesheet" href="CSS/calendar_style.css">
     <style>
-        .year-selector {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .year-btn {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
-            text-decoration: none;
-            transition: all 0.3s;
-            font-weight: bold;
-        }
-        .year-btn.active, .year-btn:hover {
-            background: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        
-        
-        .podium-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            margin-top: 1rem;
-            gap: 10px;
-            height: 120px;
-        }
-        .podium-place {
-            text-align: center;
-            position: relative;
-        }
-        .podium-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #fff;
-            margin-bottom: 5px;
-            background-color: #333;
-            object-position: top;
-        }
-        .podium-p1 .podium-img {
-            width: 70px;
-            height: 70px;
-            border-color: #FFD700; 
-        }
-        .podium-p2 .podium-img {
-            border-color: #C0C0C0; 
-        }
-        .podium-p3 .podium-img {
-            border-color: #CD7F32; 
-        }
-        .podium-name {
-            font-size: 0.8rem;
-            font-weight: bold;
-            display: block;
-        }
-        .podium-time {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.7);
-            display: block;
-        }
-        
-        .race-card {
-            transition: transform 0.3s;
-        }
-        .race-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        
         .modal {
             display: none; 
             position: fixed; 
@@ -196,55 +127,83 @@ $allPilots = $stmtPilotes->fetchAll();
     <main class="container">
         <h1 class="page-title">🏁 Calendrier & Résultats <?= $year ?></h1>
         
+        <div class="year-selector">
+            <a href="?year=2025" class="year-btn <?= $year == 2025 ? 'active' : '' ?>">2025</a>
+            <a href="?year=2026" class="year-btn <?= $year == 2026 ? 'active' : '' ?>">2026</a>
+        </div>
         
-        <div class="calendar-container">
+        <div class="calendar-container" style="text-align: left; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem;">
             <?php foreach ($groupedCourses as $round => $data): 
                 $course = $data['gp'] ?? $data['sprint'];
                 $hasSprint = ($data['gp'] && $data['sprint']);
                 $normalizedStatus = str_replace('é', 'e', $course['statut']);
-                $statusClass = ($normalizedStatus === 'Termine' || $normalizedStatus === 'Terminé') ? 'completed' : 'upcoming';
                 $isCompleted = ($normalizedStatus === 'Termine' || $normalizedStatus === 'Terminé');
+                
+                // Status Logic
+                $statusClass = 'completed';
+                $displayStatus = $course['statut'];
+                
+                if (!$isCompleted) {
+                    $statusClass = 'upcoming';
+                    $raceDate = new DateTime($course['date_course']);
+                    $now = new DateTime(); 
+                    $raceDate->setTime(0,0);
+                    $now->setTime(0,0);
+                    
+                    if ($raceDate > $now) {
+                        $interval = $now->diff($raceDate);
+                        $days = $interval->days;
+                        $displayStatus = "J-" . $days;
+                    } elseif ($raceDate == $now) {
+                        $displayStatus = "Aujourd'hui";
+                    } else {
+                        $displayStatus = "À venir"; 
+                    }
+                }
             ?>
             <div class="race-card">
-                <div class="race-header">
-                    <span class="race-round">Round <?= $course['round'] ?></span>
-                    <span class="race-status <?= $statusClass ?>"><?= htmlspecialchars($course['statut']) ?></span>
-                </div>
-                <h3><?= htmlspecialchars($course['nom']) ?></h3>
-                <p class="race-location">📍 <?= htmlspecialchars($course['lieu']) ?></p>
-                <p class="race-date">📅 <?= date('d M Y', strtotime($course['date_course'])) ?></p>
-                
-                <?php if ($isCompleted && $course['p1_nom']): ?>
-                    <div class="podium-container">
-                        <div class="podium-place podium-p2">
-                            <?php if ($course['p2_img']): ?><img src="<?= htmlspecialchars($course['p2_img']) ?>" class="podium-img" alt="P2"><?php endif; ?>
-                            <span class="podium-name"><?= htmlspecialchars($course['p2_nom']) ?></span>
-                        </div>
-                        <div class="podium-place podium-p1">
-                            <?php if ($course['p1_img']): ?><img src="<?= htmlspecialchars($course['p1_img']) ?>" class="podium-img" alt="P1"><?php endif; ?>
-                            <span class="podium-name"><?= htmlspecialchars($course['p1_nom']) ?></span>
-                        </div>
-                        <div class="podium-place podium-p3">
-                            <?php if ($course['p3_img']): ?><img src="<?= htmlspecialchars($course['p3_img']) ?>" class="podium-img" alt="P3"><?php endif; ?>
-                            <span class="podium-name"><?= htmlspecialchars($course['p3_nom']) ?></span>
-                        </div>
+                <div class="race-content">
+                    <div class="race-header">
+                        <span class="race-round">Course <?= $course['round'] ?></span>
+                        <span class="race-status <?= $statusClass ?>"><?= htmlspecialchars($displayStatus) ?></span>
                     </div>
-                <?php endif; ?>
-
-                <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; align-items: center;">
-                    <?php if ($isCompleted): ?>
-                        <a href="resultat_course.php?id=<?= $course['id'] ?>" class="btn btn-sm">Classement Grand Prix</a>
-                        <?php if ($hasSprint): ?>
-                            <a href="resultat_course.php?id=<?= $data['sprint']['id'] ?>" class="btn btn-sm" style="background-color: #444;">Classement Sprint</a>
-                        <?php endif; ?>
-                    <?php else: ?>
-                        <span class="badge">Course à venir</span>
+                    <h3><?= htmlspecialchars($course['nom']) ?></h3>
+                    <p class="race-date">📅 <?= date('d M Y', strtotime($course['date_course'])) ?></p>
+                    
+                    <?php if ($isCompleted && $course['p1_nom']): ?>
+                        <div class="podium-container">
+                            <div class="podium-place podium-p2">
+                                <?php if ($course['p2_img']): ?><img src="<?= htmlspecialchars($course['p2_img']) ?>" class="podium-img" alt="P2"><?php endif; ?>
+                                <span class="podium-name"><?= htmlspecialchars($course['p2_nom']) ?></span>
+                            </div>
+                            <div class="podium-place podium-p1">
+                                <?php if ($course['p1_img']): ?><img src="<?= htmlspecialchars($course['p1_img']) ?>" class="podium-img" alt="P1"><?php endif; ?>
+                                <span class="podium-name"><?= htmlspecialchars($course['p1_nom']) ?></span>
+                            </div>
+                            <div class="podium-place podium-p3">
+                                <?php if ($course['p3_img']): ?><img src="<?= htmlspecialchars($course['p3_img']) ?>" class="podium-img" alt="P3"><?php endif; ?>
+                                <span class="podium-name"><?= htmlspecialchars($course['p3_nom']) ?></span>
+                            </div>
+                        </div>
                     <?php endif; ?>
                 </div>
+                
+                <?php if ($isCompleted && $course['p1_nom']): ?>
+                <div class="race-actions-v4">
+                    <a href="resultat_course.php?id=<?= $course['id'] ?>" class="btn-v4 btn-v4-gp">
+                        Résultats <span class="ico">→</span>
+                    </a>
+                    <?php if ($hasSprint && isset($data['sprint'])): ?>
+                        <a href="resultat_course.php?id=<?= $data['sprint']['id'] ?>" class="btn-v4 btn-v4-sprint">
+                            Sprint <span class="ico">→</span>
+                        </a>
+                    <?php endif; ?>
+                </div>
+                <?php endif; ?>
             </div>
             <?php endforeach; ?>
             
-            <?php if (empty($courses)): ?>
+            <?php if (empty($groupedCourses)): ?>
                 <p>Aucune course trouvée pour cette année.</p>
             <?php endif; ?>
         </div>

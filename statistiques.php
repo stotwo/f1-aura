@@ -6,7 +6,7 @@ $year = isset($_GET['year']) && in_array($_GET['year'], [2025, 2026]) ? (int)$_G
 $stmt = $pdo->prepare("SELECT p.id, p.nom, p.prenom, e.nom as team_name, e.couleur as team_color, SUM(r.points) as total_points 
                      FROM resultats r 
                      JOIN pilotes p ON r.pilote_id = p.id 
-                     JOIN ecuries e ON p.ecurie_id = e.id 
+                     JOIN ecuries e ON r.ecurie_id = e.id 
                      JOIN courses c ON r.course_id = c.id
                      WHERE c.annee = ?
                      GROUP BY p.id 
@@ -20,15 +20,16 @@ $driverPoints = [];
 $driverColors = [];
 
 foreach ($top5Drivers as $d) {
-    $driverLabels[] = $d['prenom'] . ' ' . $d['nom'];
+    // Shorten name to "P. Nom" to avoid truncation
+    $initial = mb_substr($d['prenom'], 0, 1) . '.';
+    $driverLabels[] = $initial . ' ' . $d['nom'];
     $driverPoints[] = $d['total_points'];
     $driverColors[] = $d['team_color'] ?: '#ccc';
 }
 
 $stmt = $pdo->prepare("SELECT e.id, e.nom, e.couleur, SUM(r.points) as total_points 
                      FROM resultats r 
-                     JOIN pilotes p ON r.pilote_id = p.id 
-                     JOIN ecuries e ON p.ecurie_id = e.id 
+                     JOIN ecuries e ON r.ecurie_id = e.id 
                      JOIN courses c ON r.course_id = c.id
                      WHERE c.annee = ?
                      GROUP BY e.id 
@@ -41,8 +42,26 @@ $teamLabels = [];
 $teamPoints = [];
 $teamColors = [];
 
+// Helper to shorten team names like in actualites.php
+function getShortTeamNameStat($fullName) {
+    if (stripos($fullName, 'Red Bull') !== false) return 'Red Bull';
+    if (stripos($fullName, 'Mercedes') !== false) return 'Mercedes';
+    if (stripos($fullName, 'Ferrari') !== false) return 'Ferrari';
+    if (stripos($fullName, 'McLaren') !== false) return 'McLaren';
+    if (stripos($fullName, 'Aston Martin') !== false) return 'Aston Martin';
+    if (stripos($fullName, 'Alpine') !== false) return 'Alpine';
+    if (stripos($fullName, 'Williams') !== false) return 'Williams';
+    if (stripos($fullName, 'Haas') !== false) return 'Haas';
+    if (stripos($fullName, 'Sauber') !== false) return 'Sauber';
+    if (stripos($fullName, 'Racing Bulls') !== false || stripos($fullName, 'RB') !== false) return 'Racing Bulls';
+    
+    // Default fallback
+    $short = str_ireplace(['F1 Team', 'Formula 1 Team', 'Racing'], '', $fullName);
+    return trim($short);
+}
+
 foreach ($top5Constructors as $c) {
-    $teamLabels[] = $c['nom'];
+    $teamLabels[] = getShortTeamNameStat($c['nom']);
     $teamPoints[] = $c['total_points'];
     $teamColors[] = $c['couleur'] ?: '#ccc';
 }
@@ -101,7 +120,7 @@ foreach ($allDriversData as $driver) {
     <style>
         .stats-grid {
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
             gap: 2rem; 
             margin-top: 2rem;
         }
@@ -112,6 +131,8 @@ foreach ($allDriversData as $driver) {
             padding: 1.5rem;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             position: relative;
+            width: 100%; /* Ensure card doesn't exceed container */
+            overflow: hidden; /* Prevent overflow */
         }
         .stat-card h3 {
             color: var(--primary-color);
@@ -124,8 +145,60 @@ foreach ($allDriversData as $driver) {
         .full-width {
             grid-column: 1 / -1;
         }
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            height: 400px; /* Default height for big chart */
+        }
+        .chart-wrapper-small {
+            position: relative;
+            width: 100%;
+            height: 300px; /* Fixed height for small charts to prevent infinity growth */
+        }
         canvas {
-            max-height: 400px;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .mobile-hint {
+                display: block !important;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            .chart-wrapper {
+                height: 50vh; /* Use viewport height for better scaling, maybe 50% */
+                min-height: 350px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .container {
+                padding: 0.5rem; /* Maximize width */
+            }
+            .stat-card {
+                padding: 0.75rem;
+            }
+            .page-title {
+                font-size: 1.6rem !important;
+                margin-bottom: 0.5rem;
+            }
+            .modal-driver-list {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Smaller items for mobile */
+                gap: 8px;
+                padding: 10px;
+            }
+            .driver-toggle {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+            /* Modal should take more space on mobile */
+            .modal-box {
+                width: 95%;
+                max-height: 90vh; /* Allow it to be taller */
+            }
         }
         
         .modal-driver-list {
@@ -204,6 +277,68 @@ foreach ($allDriversData as $driver) {
             background: var(--primary-color);
             border-color: var(--primary-color);
         }
+        
+        /* Table Styles */
+        .hidden-table {
+            display: none;
+            margin-top: 1rem;
+            width: 100%;
+            overflow-x: auto;
+        }
+        .hidden-table.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .stats-table th {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 2px solid #444;
+            color: #888;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        .stats-table td {
+            padding: 8px;
+            border-bottom: 1px solid #333;
+        }
+        .stats-table tr:last-child td {
+            border-bottom: none;
+        }
+        .stats-pos {
+            font-weight: bold;
+            color: var(--primary-color);
+            width: 30px;
+        }
+        .stats-pts {
+            font-weight: bold;
+            text-align: right;
+        }
+        .btn-toggle-stats {
+            background: none;
+            border: 1px solid #444;
+            color: #aaa;
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+        .btn-toggle-stats:hover {
+            background: #333;
+            color: white;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -222,12 +357,74 @@ foreach ($allDriversData as $driver) {
         <div class="stats-grid">
             <div class="stat-card">
                 <h3>🏆 Classement Pilotes (Top 5)</h3>
-                <canvas id="driversChart"></canvas>
+                <div class="chart-wrapper-small">
+                    <canvas id="driversChart"></canvas>
+                </div>
+                
+                <button class="btn-toggle-stats" onclick="toggleStats('drivers-full')">
+                    Voir le classement complet ▼
+                </button>
+                <div id="drivers-full" class="hidden-table">
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">#</th>
+                                <th>Pilote</th> <!-- No "Pos" since we use # -->
+                                <th style="text-align:right;">Pts</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($allDriversData as $i => $d): ?>
+                                <tr>
+                                    <td class="stats-pos"><?= $i+1 ?></td>
+                                    <td>
+                                        <div style="display:flex; align-items:center;">
+                                            <span style="display:inline-block; width:4px; height:15px; margin-right:8px; background:<?= $d['team_color'] ?: '#fff' ?>; border-radius:2px;"></span>
+                                            <?= htmlspecialchars($d['prenom'].' '.$d['nom']) ?>
+                                        </div>
+                                    </td>
+                                    <td class="stats-pts"><?= $d['total_points'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="stat-card">
                 <h3>🏎️ Classement Constructeurs (Top 5)</h3>
-                <canvas id="constructorsChart"></canvas>
+                <div class="chart-wrapper-small">
+                    <canvas id="constructorsChart"></canvas>
+                </div>
+
+                <button class="btn-toggle-stats" onclick="toggleStats('constructors-full')">
+                    Voir le classement complet ▼
+                </button>
+                <div id="constructors-full" class="hidden-table">
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">#</th>
+                                <th>Écurie</th>
+                                <th style="text-align:right;">Pts</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($allConstructorsData as $i => $c): ?>
+                                <tr>
+                                    <td class="stats-pos"><?= $i+1 ?></td>
+                                    <td>
+                                        <div style="display:flex; align-items:center;">
+                                            <span style="display:inline-block; width:4px; height:15px; margin-right:8px; background:<?= $c['couleur'] ?: '#fff' ?>; border-radius:2px;"></span>
+                                            <?= htmlspecialchars(getShortTeamNameStat($c['nom'])) ?>
+                                        </div>
+                                    </td>
+                                    <td class="stats-pts"><?= $c['total_points'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="stat-card full-width">
@@ -237,14 +434,21 @@ foreach ($allDriversData as $driver) {
                     <button id="openComparisonModal" class="btn btn-primary">
                         <span style="margin-right:8px">👥</span> Comparer les pilotes
                     </button>
+                    <!-- Small instruction text for mobile users since legend is hidden -->
+                    <p class="mobile-hint" style="font-size: 0.8rem; color: #888; margin-top: 5px; display: none;">
+                        Touchez les points pour voir les détails
+                    </p>
                 </div>
 
-                <canvas id="pointsEvolutionChart"></canvas>
+                <div class="chart-wrapper">
+                    <canvas id="pointsEvolutionChart"></canvas>
+                </div>
             </div>
         </div>
     </main>
 
     <div id="comparisonModal" class="modal-overlay">
+        <!-- Replaced content via full file context, keeping minimal for snippet -->
         <div class="modal-box" style="max-width: 800px; width: 90%;">
             <div class="modal-header">
                 <h3>Sélectionner les pilotes à comparer</h3>
@@ -262,6 +466,19 @@ foreach ($allDriversData as $driver) {
     </div>
 
     <script>
+        function toggleStats(id) {
+            const el = document.getElementById(id);
+            const hidden = el.style.display === 'none' || !el.style.display;
+            
+            if (hidden) {
+                el.style.display = 'block';
+                el.classList.add('active');
+            } else {
+                el.style.display = 'none';
+                el.classList.remove('active');
+            }
+        }
+        
         Chart.defaults.color = '#e0e0e0';
         Chart.defaults.font.family = "'Segoe UI', sans-serif";
         
@@ -291,16 +508,26 @@ foreach ($allDriversData as $driver) {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: { display: false }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { color: '#e0e0e0' }
                     },
                     x: {
-                        grid: { display: false }
+                        grid: { display: false },
+                        ticks: {
+                            color: '#e0e0e0',
+                            font: { size: 11 },
+                            autoSkip: false,
+                            maxRotation: 45,
+                            minRotation: 0,
+                            display: false // Always hide x-axis labels to be safe based on user feedback
+                        }
                     }
                 }
             }
@@ -308,22 +535,41 @@ foreach ($allDriversData as $driver) {
 
         const constructorsCtx = document.getElementById('constructorsChart').getContext('2d');
         new Chart(constructorsCtx, {
-            type: 'doughnut',
+            type: 'bar',
             data: {
                 labels: teamLabels,
                 datasets: [{
+                    label: 'Points',
                     data: teamPoints,
                     backgroundColor: teamColors,
-                    borderWidth: 2,
-                    borderColor: '#1a1a24'
+                    borderRadius: 5,
+                    borderWidth: 0
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'right' }
+                    legend: { display: false }
                 },
-                cutout: '60%'
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { color: '#e0e0e0' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            color: '#e0e0e0',
+                            font: { size: 11 },
+                            autoSkip: false,
+                            maxRotation: 45,
+                            minRotation: 0,
+                            display: window.innerWidth > 768 /* Hide on mobile like drivers chart */
+                        }
+                    }
+                }
             }
         });
 
@@ -341,34 +587,62 @@ foreach ($allDriversData as $driver) {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 0,
+                        right: 10,
+                        top: 0,
+                        bottom: 0
+                    }
+                },
                 plugins: {
                     legend: { 
-                        display: true,
+                        display: false, // Force hide legend as per user feedback
                         position: 'bottom',
                         labels: {
                             usePointStyle: true,
-                            boxWidth: 8
+                            boxWidth: 8,
+                            padding: 15,
+                            font: { size: 11 }
                         }
                     },
                     tooltip: {
-                        mode: 'index',
-                        intersect: false
+                        mode: 'nearest',
+                        intersect: true, /* Require touching the line/point */
+                        position: 'nearest',
+                        bodyFont: { size: 12 },
+                        titleFont: { size: 13 },
+                        padding: 10,
+                        caretPadding: 5
+                    }
+                },
+                elements: {
+                    point: {
+                        radius: 2, /* Smaller default dots to avoid overlapping */
+                        hitRadius: 20, /* Keep large hit area for touch */
+                        hoverRadius: 6 /* Smaller hover effect */
+                    },
+                    line: {
+                        borderWidth: 2 /* Thinner lines */
                     }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
                         grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        title: { display: true, text: 'Points Cumulés' }
+                        title: { display: window.innerWidth > 768, text: 'Points Cumulés' },
+                        ticks: { font: { size: 10 } }
                     },
                     x: {
-                        grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { display: false } /* Hide race names completely */
                     }
                 },
                 interaction: {
                     mode: 'nearest',
-                    axis: 'x',
-                    intersect: false
+                    axis: 'xy', /* Scan both axis */
+                    intersect: true /* This is KEY: requires direct touch */
                 }
             }
         });

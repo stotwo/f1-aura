@@ -1,7 +1,6 @@
+SET FOREIGN_KEY_CHECKS=0;
 DROP DATABASE IF EXISTS f1_aura;
-
 CREATE DATABASE IF NOT EXISTS f1_aura CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
 USE f1_aura;
 
 CREATE TABLE users (
@@ -40,7 +39,7 @@ CREATE TABLE pilotes (
 CREATE TABLE users_pilotes_favoris (
     user_id INT NOT NULL,
     pilote_id INT NOT NULL,
-    PRIMARY KEY (user_id, pilotes_id),
+    PRIMARY KEY (user_id, pilote_id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (pilote_id) REFERENCES pilotes(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -54,38 +53,51 @@ CREATE TABLE users_ecuries_favorites (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO ecuries (nom, pays, couleur, image_url) VALUES
-('Red Bull Racing', 'Autriche', '#1E41FF', 'https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/Oracle_Red_Bull_Racing_logo.svg/1200px-Oracle_Red_Bull_Racing_logo.svg.png'),
-('Mercedes-AMG Petronas', 'Allemagne', '#00D2BE', 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Mercedes_AMG_Petronas_F1_Logo.svg/1200px-Mercedes_AMG_Petronas_F1_Logo.svg.png'),
-('Scuderia Ferrari', 'Italie', '#DC0000', 'https://upload.wikimedia.org/wikipedia/en/thumb/d/d1/Ferrari-Logo.svg/1200px-Ferrari-Logo.svg.png'),
-('McLaren', 'Royaume-Uni', '#FF8700', 'https://upload.wikimedia.org/wikipedia/en/thumb/6/66/McLaren_Racing_logo.svg/1200px-McLaren_Racing_logo.svg.png'),
-('Aston Martin', 'Royaume-Uni', '#006F62', 'https://upload.wikimedia.org/wikipedia/fr/thumb/7/72/Aston_Martin_Aramco_Cognizant_F1.svg/1200px-Aston_Martin_Aramco_Cognizant_F1.svg.png'),
-('Alpine', 'France', '#0090FF', 'https://upload.wikimedia.org/wikipedia/fr/thumb/b/b7/Alpine_F1_Team_2021_Logo.svg/1200px-Alpine_F1_Team_2021_Logo.svg.png'),
-('Williams', 'Royaume-Uni', '#005AFF', 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Williams_Racing_2020_Logo.svg/1200px-Williams_Racing_2020_Logo.svg.png'),
-('Alfa Romeo', 'Suisse', '#900000', 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Sauber_F1_Team_logo_2024.png/800px-Sauber_F1_Team_logo_2024.png'),
-('Haas', 'États-Unis', '#FFFFFF', 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Logo_Haas_F1.png/1200px-Logo_Haas_F1.png'),
-('AlphaTauri', 'Italie', '#2B4562', 'https://upload.wikimedia.org/wikipedia/en/thumb/5/52/RB_F1_Team_Logo.svg/1200px-RB_F1_Team_Logo.svg.png');
+('Red Bull Racing', 'Autriche', '#1E41FF', 'PICS/teams/red_bull_racing.webp'),
+('Mercedes-AMG Petronas', 'Allemagne', '#00D2BE', 'PICS/teams/mercedesamg_petronas.webp'),
+('Scuderia Ferrari', 'Italie', '#DC0000', 'PICS/teams/scuderia_ferrari_hp.webp'),
+('McLaren', 'Royaume-Uni', '#FF8700', 'PICS/teams/mclaren_formula_1_team.webp'),
+('Aston Martin', 'Royaume-Uni', '#006F62', 'PICS/teams/aston_martin_aramco.webp'),
+('Alpine', 'France', '#0090FF', 'PICS/teams/bwt_alpine_f1_team.webp'),
+('Williams', 'Royaume-Uni', '#005AFF', 'PICS/teams/williams_racing.webp'),
+('Kick Sauber / Audi', 'Suisse', '#52E252', 'PICS/teams/kick_sauber_audi.webp'),
+('Haas', 'États-Unis', '#FFFFFF', 'PICS/teams/moneygram_haas_f1_team.webp'),
+('Visa Cash App RB', 'Italie', '#2B4562', 'PICS/teams/visa_cash_app_rb.webp'),
+('Cadillac F1 Team', 'États-Unis', '#FFD700', 'PICS/teams/cadillac_f1_team.webp');
 
 INSERT INTO pilotes (nom, prenom, numero, nationalite, ecurie_id, image_url) VALUES
-('Verstappen', 'Max', 1, 'Pays-Bas', 1, 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Max_Verstappen_2024_China.jpg/640px-Max_Verstappen_2024_China.jpg'),
-('Pérez', 'Sergio', 11, 'Mexique', 1, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Sergio_Perez_2024_China.jpg/640px-Sergio_Perez_2024_China.jpg'),
-('Hamilton', 'Lewis', 44, 'Royaume-Uni', 2, 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Lewis_Hamilton_2024_China.jpg/640px-Lewis_Hamilton_2024_China.jpg'),
-('Russell', 'George', 63, 'Royaume-Uni', 2, 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/George_Russell_2024_China.jpg/640px-George_Russell_2024_China.jpg'),
-('Leclerc', 'Charles', 16, 'Monaco', 3, 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Charles_Leclerc_2024_China.jpg/640px-Charles_Leclerc_2024_China.jpg'),
-('Sainz', 'Carlos', 55, 'Espagne', 3, 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Carlos_Sainz_Jr_2024_China.jpg/640px-Carlos_Sainz_Jr_2024_China.jpg'),
-('Norris', 'Lando', 4, 'Royaume-Uni', 4, 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Lando_Norris_2024_China.jpg/640px-Lando_Norris_2024_China.jpg'),
-('Piastri', 'Oscar', 81, 'Australie', 4, 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Oscar_Piastri_2024_China.jpg/640px-Oscar_Piastri_2024_China.jpg'),
-('Alonso', 'Fernando', 14, 'Espagne', 5, 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Fernando_Alonso_2024_China.jpg/640px-Fernando_Alonso_2024_China.jpg'),
-('Stroll', 'Lance', 18, 'Canada', 5, 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Lance_Stroll_2024_China.jpg/640px-Lance_Stroll_2024_China.jpg'),
-('Gasly', 'Pierre', 10, 'France', 6, 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Pierre_Gasly_2024_China.jpg/640px-Pierre_Gasly_2024_China.jpg'),
-('Ocon', 'Esteban', 31, 'France', 6, 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Esteban_Ocon_2024_China.jpg/640px-Esteban_Ocon_2024_China.jpg'),
-('Albon', 'Alexander', 23, 'Thaïlande', 7, 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Alex_Albon_2024_China.jpg/640px-Alex_Albon_2024_China.jpg'),
-('Sargeant', 'Logan', 2, 'États-Unis', 7, 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Logan_Sargeant_2024_China.jpg/640px-Logan_Sargeant_2024_China.jpg'),
-('Bottas', 'Valtteri', 77, 'Finlande', 8, 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Valtteri_Bottas_2024_China.jpg/640px-Valtteri_Bottas_2024_China.jpg'),
-('Zhou', 'Guanyu', 24, 'Chine', 8, 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Zhou_Guanyu_2024_China.jpg/640px-Zhou_Guanyu_2024_China.jpg'),
-('Magnussen', 'Kevin', 20, 'Danemark', 9, 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Kevin_Magnussen_2024_China.jpg/640px-Kevin_Magnussen_2024_China.jpg'),
-('Hülkenberg', 'Nico', 27, 'Allemagne', 9, 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Nico_Hulkenberg_2024_China.jpg/640px-Nico_Hulkenberg_2024_China.jpg'),
-('Tsunoda', 'Yuki', 22, 'Japon', 10, 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Yuki_Tsunoda_2024_China.jpg/640px-Yuki_Tsunoda_2024_China.jpg'),
-('Ricciardo', 'Daniel', 3, 'Australie', 10, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Daniel_Ricciardo_2024_China.jpg/640px-Daniel_Ricciardo_2024_China.jpg');
+('Verstappen', 'Max', 1, 'Pays-Bas', 1, 'PICS/drivers/verstappen.png'),
+('Lawson', 'Liam', 30, 'Nouvelle-Zélande', 1, 'PICS/drivers/lawson.png'),
+
+('Russell', 'George', 63, 'Royaume-Uni', 2, 'PICS/drivers/russell.png'),
+('Antonelli', 'Andrea Kimi', 12, 'Italie', 2, 'PICS/drivers/antonelli.webp'),
+
+('Leclerc', 'Charles', 16, 'Monaco', 3, 'PICS/drivers/leclerc.png'),
+('Hamilton', 'Lewis', 44, 'Royaume-Uni', 3, 'PICS/drivers/hamilton.webp'),
+
+('Norris', 'Lando', 4, 'Royaume-Uni', 4, 'PICS/drivers/norris.png'),
+('Piastri', 'Oscar', 81, 'Australie', 4, 'PICS/drivers/piastri.png'),
+
+('Alonso', 'Fernando', 14, 'Espagne', 5, 'PICS/drivers/alonso.png'),
+('Stroll', 'Lance', 18, 'Canada', 5, 'PICS/drivers/stroll.png'),
+
+('Gasly', 'Pierre', 10, 'France', 6, 'PICS/drivers/gasly.png'),
+('Doohan', 'Jack', 7, 'Australie', 6, 'PICS/drivers/doohan.png'),
+
+('Albon', 'Alexander', 23, 'Thaïlande', 7, 'PICS/drivers/albon.png'),
+('Sainz', 'Carlos', 55, 'Espagne', 7, 'PICS/drivers/sainz.webp'),
+
+('Hülkenberg', 'Nico', 27, 'Allemagne', 8, 'PICS/drivers/hulkenberg.webp'),
+('Bortoleto', 'Gabriel', 5, 'Brésil', 8, 'PICS/drivers/bortoleto.webp'),
+
+('Ocon', 'Esteban', 31, 'France', 9, 'PICS/drivers/ocon.webp'),
+('Bearman', 'Oliver', 87, 'Royaume-Uni', 9, 'PICS/drivers/bearman.png'),
+
+('Tsunoda', 'Yuki', 22, 'Japon', 10, 'PICS/drivers/tsunoda.png'),
+('Hadjar', 'Isack', 6, 'France', 10, 'PICS/drivers/hadjar.webp'),
+
+('Bottas', 'Valtteri', 77, 'Finlande', 11, 'PICS/drivers/bottas.webp'),
+('Colapinto', 'Franco', 43, 'Argentine', 11, 'PICS/drivers/colapinto.webp');
 
 CREATE TABLE IF NOT EXISTS courses (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -171,12 +183,7 @@ CREATE TABLE IF NOT EXISTS resultats (
     FOREIGN KEY (pilote_id) REFERENCES pilotes(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 TRUNCATE TABLE resultats;
-INSERT IGNORE INTO pilotes (nom, prenom, ecurie_id, image_url)
-SELECT 'Tsunoda', 'Yuki', id, 'PICS/drivers/tsunoda.png'
-FROM ecuries WHERE nom LIKE '%Visa%' OR nom LIKE '%RB%' LIMIT 1;
-INSERT IGNORE INTO pilotes (nom, prenom, ecurie_id, image_url)
-SELECT 'Doohan', 'Jack', id, 'PICS/drivers/doohan.png'
-FROM ecuries WHERE nom LIKE '%Alpine%' LIMIT 1;
+
 INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES
 (1, (SELECT id FROM pilotes WHERE nom LIKE 'Norris%' LIMIT 1), 1, '1:42:06.304', 25),
 (1, (SELECT id FROM pilotes WHERE nom LIKE 'Verstappen%' LIMIT 1), 2, '+0.895s', 18),
@@ -198,6 +205,7 @@ INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES
 (1, (SELECT id FROM pilotes WHERE nom LIKE 'Sainz%' LIMIT 1), 18, 'DNF', 0),
 (1, (SELECT id FROM pilotes WHERE nom LIKE 'Doohan%' LIMIT 1), 19, 'DNF', 0),
 (1, (SELECT id FROM pilotes WHERE nom LIKE 'Hadjar%' LIMIT 1), 20, 'DNF', 0);
+
 INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES
 (2, (SELECT id FROM pilotes WHERE nom LIKE 'Piastri%' LIMIT 1), 1, '1:30:55.026', 25),
 (2, (SELECT id FROM pilotes WHERE nom LIKE 'Norris%' LIMIT 1), 2, '+9.748s', 18),
@@ -216,6 +224,7 @@ INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES
 (2, (SELECT id FROM pilotes WHERE nom LIKE 'H%lkenberg%' LIMIT 1), 15, '+1 tour', 0),
 (2, (SELECT id FROM pilotes WHERE nom LIKE 'Tsunoda%' LIMIT 1), 16, '+1 tour', 0),
 (2, (SELECT id FROM pilotes WHERE nom LIKE 'Alonso%' LIMIT 1), 17, 'DNF', 0);
+
 INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES
 (3, (SELECT id FROM pilotes WHERE nom LIKE 'Verstappen%' LIMIT 1), 1, '1:22:06.983', 25),
 (3, (SELECT id FROM pilotes WHERE nom LIKE 'Norris%' LIMIT 1), 2, '+1.423s', 18),
@@ -237,18 +246,267 @@ INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES
 (3, (SELECT id FROM pilotes WHERE nom LIKE 'Ocon%' LIMIT 1), 18, '+83.400s', 0),
 (3, (SELECT id FROM pilotes WHERE nom LIKE 'Bortoleto%' LIMIT 1), 19, 'DNF', 0),
 (3, (SELECT id FROM pilotes WHERE nom LIKE 'P%rez%' LIMIT 1), 20, 'DNF', 0);
-UPDATE courses SET
-    p1_pilote_id = (SELECT id FROM pilotes WHERE nom LIKE 'Norris%' LIMIT 1), p1_temps = '1:42:06.304',
-    p2_pilote_id = (SELECT id FROM pilotes WHERE nom LIKE 'Verstappen%' LIMIT 1), p2_temps = '+0.895s',
-    p3_pilote_id = (SELECT id FROM pilotes WHERE nom LIKE 'Russell%' LIMIT 1), p3_temps = '+8.481s'
-WHERE id = 1;
-UPDATE courses SET
-    p1_pilote_id = (SELECT id FROM pilotes WHERE nom LIKE 'Piastri%' LIMIT 1), p1_temps = '1:30:55.026',
-    p2_pilote_id = (SELECT id FROM pilotes WHERE nom LIKE 'Norris%' LIMIT 1), p2_temps = '+9.748s',
-    p3_pilote_id = (SELECT id FROM pilotes WHERE nom LIKE 'Russell%' LIMIT 1), p3_temps = '+11.097s'
-WHERE id = 2;
-UPDATE courses SET
-    p1_pilote_id = (SELECT id FROM pilotes WHERE nom LIKE 'Verstappen%' LIMIT 1), p1_temps = '1:22:06.983',
-    p2_pilote_id = (SELECT id FROM pilotes WHERE nom LIKE 'Norris%' LIMIT 1), p2_temps = '+1.423s',
-    p3_pilote_id = (SELECT id FROM pilotes WHERE nom LIKE 'Piastri%' LIMIT 1), p3_temps = '+2.129s'
-WHERE id = 3;
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 8, 1, '1:30:00.000', 25);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 3, 2, '+15.000s', 18);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 7, 3, '+15.000s', 15);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 6, 4, '+15.000s', 12);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 16, 5, '+15.000s', 10);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 12, 6, '+15.000s', 8);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 13, 7, '+15.000s', 6);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 1, 8, '+15.000s', 4);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 10, 9, '+15.000s', 2);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 2, 10, '+15.000s', 1);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 19, 11, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 15, 12, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 4, 13, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 21, 14, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 5, 15, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 20, 16, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 18, 17, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 22, 18, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 17, 19, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 9, 20, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 11, 21, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (4, 14, 22, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 8, 1, '1:30:00.000', 25);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 1, 2, '+15.000s', 18);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 5, 3, '+15.000s', 15);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 18, 4, '+15.000s', 12);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 2, 5, '+15.000s', 10);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 11, 6, '+15.000s', 8);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 3, 7, '+15.000s', 6);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 15, 8, '+15.000s', 4);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 17, 9, '+15.000s', 2);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 19, 10, '+15.000s', 1);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 16, 11, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 22, 12, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 10, 13, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 21, 14, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 7, 15, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 20, 16, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 12, 17, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 13, 18, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 4, 19, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 9, 20, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 14, 21, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (5, 6, 22, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 8, 1, '1:30:00.000', 25);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 7, 2, '+15.000s', 18);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 3, 3, '+15.000s', 15);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 18, 4, '+15.000s', 12);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 22, 5, '+15.000s', 10);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 21, 6, '+15.000s', 8);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 20, 7, '+15.000s', 6);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 10, 8, '+15.000s', 4);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 1, 9, '+15.000s', 2);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 17, 10, '+15.000s', 1);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 11, 11, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 5, 12, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 19, 13, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 9, 14, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 2, 15, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 15, 16, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 12, 17, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 14, 18, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 4, 19, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 13, 20, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 16, 21, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (6, 6, 22, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 1, 1, '1:30:00.000', 25);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 7, 2, '+15.000s', 18);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 8, 3, '+15.000s', 15);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 21, 4, '+15.000s', 12);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 20, 5, '+15.000s', 10);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 10, 6, '+15.000s', 8);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 11, 7, '+15.000s', 6);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 3, 8, '+15.000s', 4);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 4, 9, '+15.000s', 2);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 14, 10, '+15.000s', 1);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 12, 11, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 18, 12, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 22, 13, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 15, 14, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 2, 15, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 16, 16, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 5, 17, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 19, 18, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 13, 19, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 17, 20, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 6, 21, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (7, 9, 22, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 7, 1, '1:30:00.000', 25);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 5, 2, '+15.000s', 18);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 8, 3, '+15.000s', 15);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 17, 4, '+15.000s', 12);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 13, 5, '+15.000s', 10);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 20, 6, '+15.000s', 8);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 11, 7, '+15.000s', 6);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 19, 8, '+15.000s', 4);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 14, 9, '+15.000s', 2);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 9, 10, '+15.000s', 1);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 3, 11, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 16, 12, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 10, 13, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 18, 14, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 15, 15, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 6, 16, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 4, 17, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 21, 18, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 2, 19, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 12, 20, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 1, 21, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (8, 22, 22, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 8, 1, '1:30:00.000', 25);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 7, 2, '+15.000s', 18);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 5, 3, '+15.000s', 15);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 12, 4, '+15.000s', 12);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 3, 5, '+15.000s', 10);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 14, 6, '+15.000s', 8);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 9, 7, '+15.000s', 6);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 21, 8, '+15.000s', 4);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 20, 9, '+15.000s', 2);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 15, 10, '+15.000s', 1);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 19, 11, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 10, 12, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 6, 13, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 11, 14, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 16, 15, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 13, 16, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 22, 17, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 18, 18, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 17, 19, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 1, 20, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 4, 21, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (9, 2, 22, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 3, 1, '1:30:00.000', 25);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 1, 2, '+15.000s', 18);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 4, 3, '+15.000s', 15);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 17, 4, '+15.000s', 12);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 16, 5, '+15.000s', 10);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 12, 6, '+15.000s', 8);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 5, 7, '+15.000s', 6);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 18, 8, '+15.000s', 4);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 6, 9, '+15.000s', 2);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 22, 10, '+15.000s', 1);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 11, 11, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 19, 12, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 10, 13, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 21, 14, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 7, 15, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 2, 16, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 20, 17, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 8, 18, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 9, 19, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 15, 20, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 13, 21, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (10, 14, 22, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 7, 1, '1:30:00.000', 25);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 8, 2, '+15.000s', 18);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 5, 3, '+15.000s', 15);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 2, 4, '+15.000s', 12);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 6, 5, '+15.000s', 10);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 14, 6, '+15.000s', 8);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 15, 7, '+15.000s', 6);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 3, 8, '+15.000s', 4);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 21, 9, '+15.000s', 2);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 11, 10, '+15.000s', 1);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 16, 11, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 1, 12, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 22, 13, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 12, 14, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 13, 15, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 10, 16, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 17, 17, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 4, 18, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 18, 19, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 9, 20, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 19, 21, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (11, 20, 22, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 7, 1, '1:30:00.000', 25);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 8, 2, '+15.000s', 18);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 17, 3, '+15.000s', 15);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 16, 4, '+15.000s', 12);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 12, 5, '+15.000s', 10);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 22, 6, '+15.000s', 8);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 15, 7, '+15.000s', 6);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 14, 8, '+15.000s', 4);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 2, 9, '+15.000s', 2);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 20, 10, '+15.000s', 1);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 10, 11, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 6, 12, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 13, 13, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 3, 14, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 19, 15, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 21, 16, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 5, 17, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 11, 18, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 9, 19, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 4, 20, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 18, 21, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (12, 1, 22, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 8, 1, '1:30:00.000', 25);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 7, 2, '+15.000s', 18);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 5, 3, '+15.000s', 15);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 15, 4, '+15.000s', 12);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 6, 5, '+15.000s', 10);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 14, 6, '+15.000s', 8);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 1, 7, '+15.000s', 6);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 22, 8, '+15.000s', 4);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 20, 9, '+15.000s', 2);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 16, 10, '+15.000s', 1);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 4, 11, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 13, 12, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 17, 13, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 3, 14, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 2, 15, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 21, 16, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 18, 17, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 9, 18, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 19, 19, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 11, 20, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 12, 21, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (13, 10, 22, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 7, 1, '1:30:00.000', 25);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 8, 2, '+15.000s', 18);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 3, 3, '+15.000s', 15);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 17, 4, '+15.000s', 12);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 16, 5, '+15.000s', 10);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 21, 6, '+15.000s', 8);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 1, 7, '+15.000s', 6);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 11, 8, '+15.000s', 4);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 14, 9, '+15.000s', 2);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 6, 10, '+15.000s', 1);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 9, 11, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 4, 12, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 12, 13, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 5, 14, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 10, 15, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 2, 16, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 18, 17, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 15, 18, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 19, 19, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 20, 20, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 22, 21, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (14, 13, 22, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 8, 1, '1:30:00.000', 25);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 1, 2, '+15.000s', 18);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 2, 3, '+15.000s', 15);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 11, 4, '+15.000s', 12);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 20, 5, '+15.000s', 10);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 6, 6, '+15.000s', 8);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 13, 7, '+15.000s', 6);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 10, 8, '+15.000s', 4);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 3, 9, '+15.000s', 2);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 16, 10, '+15.000s', 1);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 21, 11, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 19, 12, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 9, 13, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 17, 14, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 7, 15, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 18, 16, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 4, 17, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 15, 18, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 5, 19, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 22, 20, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 12, 21, '+15.000s', 0);
+INSERT INTO resultats (course_id, pilote_id, position, temps, points) VALUES (15, 14, 22, '+15.000s', 0);

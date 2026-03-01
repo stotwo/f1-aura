@@ -1,0 +1,151 @@
+
+/* Shared Calendar Styles (2025/2026) */
+
+/* V4 - Design Final Premium */
+.race-card {
+    background: linear-gradient(145deg, #1e1e2e, #12121a);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.race-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+.race-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+}
+.race-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+}
+.race-round {
+    background: #e30613;
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 10px rgba(227, 6, 19, 0.4);
+    border: none;
+}
+.race-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.race-status.completed {
+    background: rgba(255,255,255,0.08) !important;
+    color: rgba(255,255,255,0.6) !important;
+}
+.race-status.upcoming {
+    background: rgba(0, 208, 132, 0.1) !important;
+    color: #00d084 !important;
+    border-color: rgba(0, 208, 132, 0.3);
+}
+
+.race-card h3 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 0.35rem;
+    letter-spacing: -0.3px;
+}
+.race-date {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 1rem;
+}
+
+/* V5 - Pill Buttons Modern */
+.race-actions-v4 {
+    padding: 0 1.5rem 1.5rem;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn-v4 {
+    padding: 0.55rem 1.4rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.25s ease;
+    border: none;
+}
+
+.btn-v4-gp {
+    background: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 4px 18px rgba(227, 6, 19, 0.35);
+}
+.btn-v4-gp:hover {
+    background: #ff1a29;
+    box-shadow: 0 6px 24px rgba(227, 6, 19, 0.55);
+    transform: translateY(-2px);
+    color: #fff;
+}
+
+.btn-v4-sprint {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.12);
+}
+.btn-v4-sprint:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.25);
+}
+
+.btn-v4 .ico {
+    font-size: 0.7rem;
+    transition: transform 0.2s;
+}
+.btn-v4:hover .ico {
+    transform: translateX(3px);
+}
+
+/* Podium Styles */
+.podium-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-top: 1rem;
+    gap: 10px;
+    height: 120px;
+}
+.podium-place { text-align: center; position: relative; }
+.podium-img {
+    width: 50px; height: 50px; border-radius: 50%; object-fit: cover;
+    border: 2px solid #fff; margin-bottom: 5px; background-color: #333;
+    object-position: top;
+}
+.podium-p1 .podium-img { width: 70px; height: 70px; border-color: #FFD700; }
+.podium-p2 .podium-img { border-color: #C0C0C0; }
+.podium-p3 .podium-img { border-color: #CD7F32; }
+.podium-name {
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: block;
+    color: #fff;
+}

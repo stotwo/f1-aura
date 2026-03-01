@@ -86,6 +86,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_favorites'])) {
+    
+    // Vérifier si l'utilisateur existe toujours
+    $checkUser = $pdo->prepare("SELECT id FROM users WHERE id = ?");
+    $checkUser->execute([$_SESSION['user_id']]);
+    if (!$checkUser->fetch()) {
+        session_destroy();
+        header("Location: connexion.php");
+        exit;
+    }
+
     $selected_pilotes = $_POST['pilotes'] ?? [];
     $selected_ecuries = $_POST['ecuries'] ?? [];
 
@@ -109,16 +119,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_favorites'])) 
         }
 
         $pdo->commit();
-        $success = 'Vos préférences ont été mises à jour avec succès !';
-        
-        $stmt = $pdo->prepare("SELECT pilote_id FROM users_pilotes_favoris WHERE user_id = ?");
-        $stmt->execute([$_SESSION['user_id']]);
-        $user_pilotes = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-        $stmt = $pdo->prepare("SELECT ecurie_id FROM users_ecuries_favorites WHERE user_id = ?");
-        $stmt->execute([$_SESSION['user_id']]);
-        $user_ecuries = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
+        header("Location: dashboard.php");
+        exit;
     } catch (Exception $e) {
         $pdo->rollBack();
         $error = 'Erreur lors de la mise à jour : ' . $e->getMessage();
@@ -212,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_favorites'])) 
             <form method="POST" class="preferences-form">
                 <input type="hidden" name="update_favorites" value="1">
                 <div class="preferences-section">
-                    <h2>🏎️ Mes Pilotes Favoris</h2>
+                    <h2 id="mes-pilotes" style="scroll-margin-top: 120px;">🏎️ Mes Pilotes Favoris</h2>
                     <div class="selection-grid">
                         <?php foreach ($pilotes as $pilote): ?>
                             <?php 

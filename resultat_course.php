@@ -80,8 +80,9 @@ if (isset($_SESSION['user_id'])) {
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .gp-title { font-size: 2.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .gp-meta { display: flex; justify-content: center; align-items: center; gap: 1rem; }
         .gp-date { font-size: 1.1rem; color: #ccc; font-weight: 300; }
-        .gp-location { color: var(--primary-color); font-weight: 700; margin-top: 0.5rem; font-size: 1.1rem; }
+        .gp-location { color: var(--primary-color); font-weight: 700; font-size: 1.1rem; }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
         .btn-back { display: inline-block; margin-bottom: 1rem; color: #aaa; text-decoration: none; font-weight: 600; transition: 0.3s; }
@@ -93,6 +94,8 @@ if (isset($_SESSION['user_id'])) {
             background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff;
             padding: 0.6rem 1.2rem; border-radius: 50px; cursor: pointer; transition: all 0.3s;
             font-family: inherit; font-weight: 600; font-size: 0.9rem;
+            display: inline-flex; justify-content: center; align-items: center; /* Flexbox for centering */
+            text-align: center; /* Fallback */
         }
         .filter-btn:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
         .filter-btn.active { background: var(--primary-color); border-color: var(--primary-color); }
@@ -153,79 +156,106 @@ if (isset($_SESSION['user_id'])) {
             .filter-btn { padding: 0.3rem 0.6rem; font-size: 0.7rem; flex: 0 1 auto; min-width: 100px; }
 
             
-            .result-table, .result-table tbody, .result-table tr, .result-table td { display: block; width: 100%; box-sizing: border-box; }
+            .result-table, .result-table tbody { display: block; width: 100%; }
             .result-table thead { display: none; }
             
             .result-row {
                 display: grid !important; 
-                grid-template-columns: 25px 40px 1fr auto; 
+                grid-template-columns: 35px 1fr auto; /* Pos | Driver | Stats */
                 align-items: center;
-                gap: 10px;
-                padding: 0.5rem;
-                margin-bottom: 0.4rem; 
+                gap: 8px;
+                padding: 10px;
+                margin-bottom: 8px; 
                 border-bottom: 1px solid rgba(255,255,255,0.05); 
-                border-radius: 0; background: transparent; 
+                background: rgba(255,255,255,0.02);
+                border-radius: 8px;
             }
 
             .result-cell { padding: 0; border: none; background: transparent; }
 
-            
+            /* Position Column */
             .pos-col { 
-                width: auto; margin: 0; 
+                grid-column: 1;
                 text-align: center; 
-                font-size: 1rem; font-weight: bold; 
+                font-size: 0.95rem; /* Reduced specific font size for NC */
+                font-weight: 800; 
+                width: 100%;
             }
 
-            
+            /* Driver Column (Name & Image) */
             .driver-col-cell { 
-                padding: 0; overflow: visible; flex: none;
-                display: flex; justify-content: center;
-            }
-            .driver-col { gap: 0; width: 100%; justify-content: center; }
-            .driver-avatar { 
-                width: 35px; height: 35px; min-width: 35px; 
-                margin: 0; border: 1px solid #444; 
-            }
-            
-            .driver-info-wrapper { display: none; } 
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            .driver-col-cell {
-                display: contents; 
+                grid-column: 2;
+                display: flex;
+                align-items: center;
+                overflow: hidden;
             }
             
             .driver-col {
-                display: contents; 
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .driver-avatar { 
+                width: 38px; height: 38px; min-width: 38px;
+                border-radius: 50%;
+                border: 2px solid rgba(255,255,255,0.1); 
+                object-fit: cover;
+                flex-shrink: 0;
             }
             
             .driver-info-wrapper {
-                display: flex; flex-direction: column; justify-content: center;
+                display: flex; 
+                flex-direction: column; 
+                justify-content: center;
                 overflow: hidden; 
-                min-width: 0;
+                min-width: 0; 
+                padding-left: 2px;
             }
 
-            .driver-name { 
-                font-size: 0.9rem; font-weight: 600;
-                white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            .driver-name {
+                font-size: 0.95rem; /* Slightly smaller for mobile if names are long */
+                font-weight: 700;
+                /* display: flex is set inline */
+                overflow: hidden;
             }
-            
-            .driver-team-mobile { font-size: 0.7rem; color: #888; display: none; } 
 
-            
-            .stats-col-cell { 
-                text-align: right; 
-                display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
+            /* Truncate the name span specifically */
+            .driver-name > span:first-child {
                 white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                min-width: 0;
+                display: block; /* Ensure ellipsis works */
             }
-            .time-text { font-size: 0.8rem; color: #fff; margin: 0; font-family: monospace; }
-            .pts-text { font-size: 0.75rem; color: var(--primary-color); font-weight: bold; }
+
+            /* Make sure the star doesn't shrink */
+            .driver-name > span:last-child {
+                flex-shrink: 0;
+            }
+
+            .driver-team-mobile {
+                 font-size: 0.75rem;
+                 color: rgba(255,255,255,0.5);
+                 white-space: nowrap;
+                 overflow: hidden;
+                 text-overflow: ellipsis;
+                 display: block;
+                 max-width: 100%;
+            }
+
+            /* Stats Column (Time & Pts) */
+            .stats-col-cell.mobile-only { 
+                grid-column: 3;
+                text-align: right; 
+                display: flex !important; 
+                flex-direction: column; 
+                align-items: flex-end; 
+                justify-content: center;
+            }
+            .time-text { font-size: 0.8rem; color: #ccc; margin: 0; font-family: monospace; background: transparent; padding: 0; }
+            .pts-text { font-size: 0.9rem; color: var(--primary-color); font-weight: 800; margin-top: 3px; }
         }
     </style>
 </head>
@@ -276,10 +306,35 @@ if (isset($_SESSION['user_id'])) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($allPilots as $driver): 
+                    <?php 
+                    $teamMapping = [
+                        'Red Bull Racing' => 'Red Bull',
+                        'Mercedes-AMG Petronas' => 'Mercedes',
+                        'Scuderia Ferrari' => 'Ferrari',
+                        'McLaren Formula 1 Team' => 'McLaren',
+                        'Aston Martin Aramco' => 'Aston Martin',
+                        'Alpine F1 Team' => 'Alpine',
+                        'Williams Racing' => 'Williams',
+                        'Visa Cash App RB' => 'VCARB',
+                        'Stake F1 Team Kick Sauber' => 'Sauber',
+                        'Kick Sauber' => 'Sauber',
+                        'MoneyGram Haas F1 Team' => 'Haas',
+                        'Haas F1 Team' => 'Haas'
+                    ];
+
+                    foreach ($allPilots as $driver): 
                         $isFavorite = in_array($driver['pilote_id'], $userFavorites);
                         $rowClass = 'result-row';
                         if ($isFavorite) $rowClass .= ' favorite-row';
+                        
+                        // Shorten Team Name
+                        $teamName = $driver['ecurie'] ?? '-';
+                        foreach ($teamMapping as $long => $short) {
+                            if (stripos($teamName, $long) !== false) {
+                                $teamName = $short;
+                                break;
+                            }
+                        }
                     ?>
                     <tr class="<?= $rowClass ?>" data-favorite="<?= $isFavorite ? 'true' : 'false' ?>">
                         <td class="result-cell pos-col pos-<?= $driver['position'] ?>">
@@ -290,19 +345,26 @@ if (isset($_SESSION['user_id'])) {
                             <div class="driver-col">
                                 <img src="<?= htmlspecialchars($driver['img']) ?>" alt="Driver" class="driver-avatar">
                                 <div class="driver-info-wrapper">
-                                    <div class="driver-name">
-                                        <?= htmlspecialchars($driver['prenom'] . ' ' . $driver['nom']) ?>
+                                    <div class="driver-name" style="display: flex; flex-direction: row; align-items: center; gap: 5px;">
+                                        <span><?php 
+                                            $fullName = $driver['prenom'] . ' ' . $driver['nom'];
+                                            if (strip_tags($fullName) == 'Andrea Kimi Antonelli') {
+                                                echo 'Kimi Antonelli';
+                                            } else {
+                                                echo htmlspecialchars($fullName);
+                                            }
+                                        ?></span>
                                         <?php if ($isFavorite): ?>
-                                            <span style="color: #FFD700; font-size: 0.8rem; margin-left: 5px;">★</span>
+                                            <span style="color: #FFD700; font-size: 0.8rem;">★</span>
                                         <?php endif; ?>
                                     </div>
-                                    <div class="driver-team-mobile"><?= htmlspecialchars($driver['ecurie'] ?? '-') ?></div>
+                                    <div class="driver-team-mobile"><?= htmlspecialchars($teamName) ?></div>
                                 </div>
                             </div>
                         </td>
 
                         <td class="result-cell desktop-only ecurie-desktop">
-                            <?= htmlspecialchars($driver['ecurie'] ?? '-') ?>
+                            <?= htmlspecialchars($teamName) ?>
                         </td>
 
                         <td class="result-cell desktop-only">
@@ -347,19 +409,29 @@ if (isset($_SESSION['user_id'])) {
             rows.forEach(row => {
                 const isFav = row.getAttribute('data-favorite') === 'true';
                 if (type === 'all') {
-                    row.style.display = '';
+                    row.style.setProperty('display', '', 'important');
+                    if (window.innerWidth <= 768) {
+                        row.classList.remove('hidden-row');
+                    } else {
+                        row.style.display = '';
+                    }
                     visibleRows++;
                 } else if (type === 'favorites') {
                     if (isFav) {
                         row.style.display = '';
+                        row.classList.remove('hidden-row');
                         visibleRows++;
                     } else {
-                        row.style.display = 'none';
+                        row.style.display = 'none'; // Works for desktop where !important is not used
+                        row.classList.add('hidden-row'); // For mobile
                     }
                 }
             });
         }
     </script>
+    <style>
+        .hidden-row { display: none !important; }
+    </style>
     <?php include 'includes/footer.php'; ?>
 </body>
 </html>

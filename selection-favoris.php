@@ -22,6 +22,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($selected_pilotes) && empty($selected_ecuries)) {
         $error = 'Veuillez sélectionner au moins un pilote ou une écurie.';
     } else {
+        // Verify user exists before proceeding
+        $checkUser = $pdo->prepare("SELECT id FROM users WHERE id = ?");
+        $checkUser->execute([$_SESSION['user_id']]);
+        if (!$checkUser->fetch()) {
+            // User no longer exists in DB - force logout
+            session_destroy();
+            header('Location: connexion.php?error=session_expired');
+            exit;
+        }
+
         $pdo->beginTransaction();
         
         try {

@@ -198,7 +198,12 @@ foreach ($links as $link) {
     if (preg_match('/\/races\/\d+\/([^\/]+)\//', $href, $matches)) {
         $raceSlug = $matches[1];
     } else {
-        $raceSlug = strtolower(trim($link->textContent));
+        // Fallback or better regex for simple paths
+        $parts = explode('/', trim($href, '/'));
+        // usually .../races/ID/SLUG/TYPE
+        // index 4 or 5 depending on prefix
+        // Let's assume the one before 'sprint-results' or 'race-result' is the slug
+        $raceSlug = $parts[count($parts)-2];
     }
     
     $uniqueKey = $raceSlug . ($isSprint ? '-sprint' : '-race');
@@ -257,6 +262,68 @@ foreach ($links as $link) {
     } elseif ($course) {
         echo "Match trouvé DB ID: " . $course['id'] . " (" . $course['nom'] . ")\n";
         parseRaceResults($pdo, $fullUrl, $course['id']);
+
+        // Check for Sprint link within the race page itself
+        if (!$isSprint) {
+            $raceHtml = getHtmlContent($fullUrl);
+            if ($raceHtml) {
+                $raceDom = new DOMDocument();
+                @$raceDom->loadHTML($raceHtml);
+                $raceXpath = new DOMXPath($raceDom);
+                
+                // Look for links with "Sprint" in text or href
+                $sprintLinks = $raceXpath->query("//a[contains(@href, 'sprint') or contains(translate(text(), 'SPRINT', 'sprint'), 'sprint')]");
+                
+                if ($sprintLinks->length > 0) {
+                    $node = $sprintLinks->item(0);
+                    if ($node instanceof DOMElement) {
+                        $sprintHref = $node->getAttribute('href');
+                        // Resolve relative URL
+                        if (strpos($sprintHref, 'http') === false) {
+                            $sprintUrl = "https://www.formula1.com" . $sprintHref;
+                        } else {
+                            $sprintUrl = $sprintHref;
+                        }
+
+                        echo "  -> Found potential Sprint link: $sprintUrl\n";
+
+                        // Verify if it's actually the results page (simple check)
+                        $sprintContent = @getHtmlContent($sprintUrl);
+                        if ($sprintContent && strpos($sprintContent, 'resultsarchive-table') !== false) {
+                            // Create sprint course logic (same as before)
+                            $sprintName = "Sprint - " . $course['nom'];
+                            $stmtSprint = $pdo->prepare("SELECT id FROM courses WHERE nom = ? AND annee = ?");
+                            $stmtSprint->execute([$sprintName, $year]);
+                            $sprintId = $stmtSprint->fetchColumn();
+
+                            if (!$sprintId) {
+                                // Logic to create the sprint race if it doesn't exist
+                                $stmtMain = $pdo->prepare("SELECT lieu, date_course, round FROM courses WHERE id = ?");
+                                $stmtMain->execute([$course['id']]);
+                                $mainRace = $stmtMain->fetch();
+
+                                if ($mainRace) {
+                                    $sprintDate = date('Y-m-d', strtotime($mainRace['date_course'] . ' -1 day'));
+                                    // Insert the new sprint race
+                                    $stmtIns = $pdo->prepare("INSERT INTO courses (annee, round, nom, lieu, date_course, statut) VALUES (?, ?, ?, ?, ?, 'Terminé')");
+                                    $stmtIns->execute([$year, $mainRace['round'], $sprintName, $mainRace['lieu'], $sprintDate]);
+                                    $sprintId = $pdo->lastInsertId();
+                                    echo "     [NEW SPRINT] $sprintName (ID: $sprintId)\n";
+                                }
+                            } else {
+                                echo "     [SPRINT EXISTS] $sprintName (ID: $sprintId)\n";
+                            }
+
+                            // If we have a sprint ID (either existing or just created), parse results
+                            if ($sprintId) {
+                                parseRaceResults($pdo, $sprintUrl, $sprintId);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         sleep(1);
     } else {
         echo "Pas de match DB pour $raceSlug ($dbTerm) - Ignoré.\n";
