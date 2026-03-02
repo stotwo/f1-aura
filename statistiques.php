@@ -108,14 +108,8 @@ foreach ($allDriversData as $driver) {
     ];
 }
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Statistiques Interactives - F1 Aura</title>
-    <link rel="icon" type="image/png" href="PICS/logo.png">
-    <link rel="stylesheet" href="CSS/style.css?v=<?php echo time(); ?>">
+
+<?php include 'includes/header.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .stats-grid {
@@ -354,9 +348,7 @@ foreach ($allDriversData as $driver) {
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
-</head>
-<body>
-    <?php include 'includes/header.php'; ?>
+
     
     <main class="container">
         <h1 class="page-title" style="text-align: center; margin-bottom: 1rem; font-size: 2.5rem; text-transform: uppercase;">
@@ -368,14 +360,7 @@ foreach ($allDriversData as $driver) {
             <a href="?year=2026" class="year-btn <?= $year === 2026 ? 'active' : '' ?>">2026</a>
         </div>
         
-        <?php if (empty($allDriversData)): ?>
-            <div style="text-align: center; margin: 4rem 0; padding: 3rem; background: var(--bg-card); border-radius: 10px; border: 1px solid var(--border-color);">
-                <i class="fa-solid fa-hourglass-start" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
-                <h2 style="font-size: 2rem; margin-bottom: 0.5rem; color: #fff;">La saison n'a pas encore commencée</h2>
-                <p style="opacity: 0.7;">Les classements seront disponibles après la première course.</p>
-            </div>
-            </main>
-        <?php else: ?>
+        <?php if (!empty($allDriversData)) { ?>
         <div class="stats-grid">
             <div class="stat-card">
                 <h3>🏆 Classement Pilotes (Top 5)</h3>
@@ -467,8 +452,17 @@ foreach ($allDriversData as $driver) {
                 </div>
             </div>
         </div>
+        
+    <?php } else { ?>
+            <div style="text-align: center; margin: 4rem 0; padding: 3rem; background: var(--bg-card); border-radius: 10px; border: 1px solid var(--border-color);">
+                <i class="fa-solid fa-hourglass-start" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                <h2 style="font-size: 2rem; margin-bottom: 0.5rem; color: #fff;">La saison n'a pas encore commencée</h2>
+                <p style="opacity: 0.7;">Les classements seront disponibles après la première course.</p>
+            </div>
+    <?php } ?>
     </main>
 
+    <?php if (!empty($allDriversData)) { ?>
     <div id="comparisonModal" class="modal-overlay">
         <!-- Replaced content via full file context, keeping minimal for snippet -->
         <div class="modal-box" style="max-width: 800px; width: 90%;">
@@ -731,7 +725,7 @@ foreach ($allDriversData as $driver) {
             }
         });
     </script>
-    <?php endif; ?>
+    <?php } ?>
 
     <?php include 'includes/footer.php'; ?>
 </body>
