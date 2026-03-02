@@ -368,6 +368,14 @@ foreach ($allDriversData as $driver) {
             <a href="?year=2026" class="year-btn <?= $year === 2026 ? 'active' : '' ?>">2026</a>
         </div>
         
+        <?php if (empty($allDriversData)): ?>
+            <div style="text-align: center; margin: 4rem 0; padding: 3rem; background: var(--bg-card); border-radius: 10px; border: 1px solid var(--border-color);">
+                <i class="fa-solid fa-hourglass-start" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                <h2 style="font-size: 2rem; margin-bottom: 0.5rem; color: #fff;">La saison n'a pas encore commencée</h2>
+                <p style="opacity: 0.7;">Les classements seront disponibles après la première course.</p>
+            </div>
+            </main>
+        <?php else: ?>
         <div class="stats-grid">
             <div class="stat-card">
                 <h3>🏆 Classement Pilotes (Top 5)</h3>
@@ -723,6 +731,7 @@ foreach ($allDriversData as $driver) {
             }
         });
     </script>
+    <?php endif; ?>
 
     <?php include 'includes/footer.php'; ?>
 </body>
