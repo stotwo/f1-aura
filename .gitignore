@@ -9,3 +9,7 @@
 
 # Configuration (Exclu)
 config.php
+
+# Archives (Fichiers de maintenance et debug)
+_archive/
+
