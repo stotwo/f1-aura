@@ -25,7 +25,7 @@ $sqlTeams = "
     FROM ecuries e 
     LEFT JOIN pilotes p ON e.id = p.ecurie_id
     LEFT JOIN resultats r ON p.id = r.pilote_id AND r.course_id IN (SELECT id FROM courses WHERE annee = ?)
-    WHERE 1=1
+    WHERE e.nom NOT REGEXP '^[0-9]+$' AND LENGTH(e.nom) > 2
 ";
 
 // Exclure Cadillac seulement en 2025 (car ils arrivent en 2026)

@@ -31,6 +31,7 @@ $stmt = $pdo->prepare("SELECT e.id, e.nom, e.couleur, COALESCE(SUM(r.points), 0)
                      FROM ecuries e 
                      LEFT JOIN pilotes p ON e.id = p.ecurie_id
                      LEFT JOIN resultats r ON p.id = r.pilote_id AND r.course_id IN (SELECT id FROM courses WHERE annee = ?)
+                     WHERE e.nom NOT REGEXP '^[0-9]+$' AND LENGTH(e.nom) > 2 " . ($year == 2025 ? "AND e.nom NOT LIKE '%Cadillac%'" : " AND 1=1 ") . "
                      GROUP BY e.id 
                      ORDER BY total_points DESC");
 $stmt->execute([$year]);
