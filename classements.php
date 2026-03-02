@@ -10,7 +10,7 @@ $stmtPilotes = $pdo->prepare("
     SELECT p.id, p.nom, p.prenom, p.image_url, e.nom as team_name, e.couleur as team_color, SUM(r.points) as total_points 
     FROM resultats r 
     JOIN pilotes p ON r.pilote_id = p.id 
-    JOIN ecuries e ON r.ecurie_id = e.id 
+    JOIN ecuries e ON p.ecurie_id = e.id 
     JOIN courses c ON r.course_id = c.id
     WHERE c.annee = ?
     GROUP BY p.id 
@@ -23,7 +23,8 @@ $driverStandings = $stmtPilotes->fetchAll();
 $sqlTeams = "
     SELECT e.id, e.nom, e.couleur, COALESCE(SUM(r.points), 0) as total_points 
     FROM ecuries e 
-    LEFT JOIN resultats r ON r.ecurie_id = e.id AND r.course_id IN (SELECT id FROM courses WHERE annee = ?)
+    LEFT JOIN pilotes p ON e.id = p.ecurie_id
+    LEFT JOIN resultats r ON p.id = r.pilote_id AND r.course_id IN (SELECT id FROM courses WHERE annee = ?)
     WHERE 1=1
 ";
 

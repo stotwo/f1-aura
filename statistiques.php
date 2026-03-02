@@ -6,7 +6,7 @@ $year = isset($_GET['year']) && in_array($_GET['year'], [2025, 2026]) ? (int)$_G
 $stmt = $pdo->prepare("SELECT p.id, p.nom, p.prenom, e.nom as team_name, e.couleur as team_color, SUM(r.points) as total_points 
                      FROM resultats r 
                      JOIN pilotes p ON r.pilote_id = p.id 
-                     JOIN ecuries e ON r.ecurie_id = e.id 
+                     JOIN ecuries e ON p.ecurie_id = e.id 
                      JOIN courses c ON r.course_id = c.id
                      WHERE c.annee = ?
                      GROUP BY p.id 
@@ -29,7 +29,8 @@ foreach ($top5Drivers as $d) {
 
 $stmt = $pdo->prepare("SELECT e.id, e.nom, e.couleur, SUM(r.points) as total_points 
                      FROM resultats r 
-                     JOIN ecuries e ON r.ecurie_id = e.id 
+                     JOIN pilotes p ON r.pilote_id = p.id
+                     JOIN ecuries e ON p.ecurie_id = e.id 
                      JOIN courses c ON r.course_id = c.id
                      WHERE c.annee = ?
                      GROUP BY e.id 
