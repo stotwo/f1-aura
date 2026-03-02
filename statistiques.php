@@ -112,9 +112,14 @@ foreach ($allDriversData as $driver) {
 <?php include 'includes/header.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* Surcharge de la largeur du conteneur pour les statistiques */
+        .container {
+            max-width: 95% !important; /* Utiliser presque toute la largeur sur les grands écrans */
+        }
+        
         .stats-grid {
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Cartes un peu plus larges minimum */
             gap: 2rem; 
             margin-top: 2rem;
             margin-bottom: 4rem; /* Added spacing */
