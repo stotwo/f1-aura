@@ -27,12 +27,10 @@ foreach ($top5Drivers as $d) {
     $driverColors[] = $d['team_color'] ?: '#ccc';
 }
 
-$stmt = $pdo->prepare("SELECT e.id, e.nom, e.couleur, SUM(r.points) as total_points 
-                     FROM resultats r 
-                     JOIN pilotes p ON r.pilote_id = p.id
-                     JOIN ecuries e ON p.ecurie_id = e.id 
-                     JOIN courses c ON r.course_id = c.id
-                     WHERE c.annee = ?
+$stmt = $pdo->prepare("SELECT e.id, e.nom, e.couleur, COALESCE(SUM(r.points), 0) as total_points 
+                     FROM ecuries e 
+                     LEFT JOIN pilotes p ON e.id = p.ecurie_id
+                     LEFT JOIN resultats r ON p.id = r.pilote_id AND r.course_id IN (SELECT id FROM courses WHERE annee = ?)
                      GROUP BY e.id 
                      ORDER BY total_points DESC");
 $stmt->execute([$year]);
@@ -121,9 +119,11 @@ foreach ($allDriversData as $driver) {
     <style>
         .stats-grid {
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
             gap: 2rem; 
             margin-top: 2rem;
+            margin-bottom: 4rem; /* Added spacing */
+            width: 100%;
         }
         .stat-card {
             background: var(--bg-card); 
@@ -133,7 +133,9 @@ foreach ($allDriversData as $driver) {
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             position: relative;
             width: 100%; /* Ensure card doesn't exceed container */
+            min-width: 0; /* Important for grid items to shrink */
             overflow: hidden; /* Prevent overflow */
+            box-sizing: border-box;
         }
         .stat-card h3 {
             color: var(--primary-color);
@@ -169,18 +171,28 @@ foreach ($allDriversData as $driver) {
                 margin-bottom: 10px;
             }
             .chart-wrapper {
-                height: 50vh; /* Use viewport height for better scaling, maybe 50% */
-                min-height: 350px;
+                height: 40vh; /* Reduced height for better fit */
+                min-height: 300px;
             }
             .stats-grid {
-                grid-template-columns: 1fr;
+                display: flex !important;
+                flex-direction: column;
                 gap: 1.5rem;
+                width: 100% !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                margin-bottom: 5rem !important; /* Bottom spacing for mobile */
             }
             .container {
-                padding: 0.5rem; /* Maximize width */
+                padding: 0 15px !important; /* Safe padding */
+                width: 100% !important;
+                overflow-x: hidden;
             }
             .stat-card {
-                padding: 0.75rem;
+                padding: 1rem !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+                margin: 0 !important;
             }
             .page-title {
                 font-size: 1.6rem !important;
