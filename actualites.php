@@ -1,8 +1,7 @@
 <?php
 require_once 'config.php';
-requireLogin();
 
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['user_id'] ?? null;
 
 $filter = $_GET['filter'] ?? 'all';
 // Multi-select logic
@@ -17,15 +16,19 @@ $sql = "SELECT DISTINCT a.* FROM articles a";
 $params = [];
 
 if ($filter === 'favorites') {
-    $sql .= "
-        LEFT JOIN article_tags_pilotes atp ON a.id = atp.article_id
-        LEFT JOIN users_pilotes_favoris upf ON atp.pilote_id = upf.pilote_id AND upf.user_id = ?
-        LEFT JOIN article_tags_ecuries ate ON a.id = ate.article_id
-        LEFT JOIN users_ecuries_favorites uef ON ate.ecurie_id = uef.ecurie_id AND uef.user_id = ?
-        WHERE (upf.user_id IS NOT NULL OR uef.user_id IS NOT NULL)
-    ";
-    $params[] = $user_id;
-    $params[] = $user_id;
+    if ($user_id) {
+        $sql .= "
+            LEFT JOIN article_tags_pilotes atp ON a.id = atp.article_id
+            LEFT JOIN users_pilotes_favoris upf ON atp.pilote_id = upf.pilote_id AND upf.user_id = ?
+            LEFT JOIN article_tags_ecuries ate ON a.id = ate.article_id
+            LEFT JOIN users_ecuries_favorites uef ON ate.ecurie_id = uef.ecurie_id AND uef.user_id = ?
+            WHERE (upf.user_id IS NOT NULL OR uef.user_id IS NOT NULL)
+        ";
+        $params[] = $user_id;
+        $params[] = $user_id;
+    } else {
+        $sql .= " WHERE 1=0";
+    }
 
 } elseif (!empty($team_ids) || !empty($driver_ids)) {
     $sql .= " LEFT JOIN article_tags_ecuries ate ON a.id = ate.article_id";
@@ -477,16 +480,20 @@ function getDriverImage($nom, $prenom = '') {
             <?php 
             $message = "Aucune actualité trouvée pour ce filtre.";
             if ($filter === 'favorites' && empty($articles)) {
-                $nbFavPilotes = $pdo->prepare("SELECT COUNT(*) FROM users_pilotes_favoris WHERE user_id = ?");
-                $nbFavPilotes->execute([$user_id]);
-                $countP = $nbFavPilotes->fetchColumn();
+                if (!$user_id) {
+                    $message = "Veuillez vous connecter pour voir vos favoris !";
+                } else {
+                    $nbFavPilotes = $pdo->prepare("SELECT COUNT(*) FROM users_pilotes_favoris WHERE user_id = ?");
+                    $nbFavPilotes->execute([$user_id]);
+                    $countP = $nbFavPilotes->fetchColumn();
 
-                $nbFavEcuries = $pdo->prepare("SELECT COUNT(*) FROM users_ecuries_favorites WHERE user_id = ?");
-                $nbFavEcuries->execute([$user_id]);
-                $countE = $nbFavEcuries->fetchColumn();
+                    $nbFavEcuries = $pdo->prepare("SELECT COUNT(*) FROM users_ecuries_favorites WHERE user_id = ?");
+                    $nbFavEcuries->execute([$user_id]);
+                    $countE = $nbFavEcuries->fetchColumn();
 
-                if (($countP + $countE) == 0) {
-                    $message = "Veuillez ajouter des favoris afin de profiter de cette fonctionnalité !";
+                    if (($countP + $countE) == 0) {
+                        $message = "Veuillez ajouter des favoris afin de profiter de cette fonctionnalité !";
+                    }
                 }
             }
             ?>
@@ -494,7 +501,10 @@ function getDriverImage($nom, $prenom = '') {
             <?php if (empty($articles)): ?>
                 <div style="grid-column: 1 / -1; text-align: center; color: #ccc; margin-top: 2rem;">
                     <p><?= htmlspecialchars($message) ?></p>
-                    <?php if ($message !== "Aucune actualité trouvée pour ce filtre."): ?>
+                    <?php if ($message === "Veuillez vous connecter pour voir vos favoris !"): ?>
+                        <br>
+                        <a href="connexion.php" class="btn btn-primary">Se connecter</a>
+                    <?php elseif ($message !== "Aucune actualité trouvée pour ce filtre."): ?>
                         <br>
                         <a href="selection-favoris.php" class="btn btn-primary">Gérer mes favoris</a>
                     <?php endif; ?>
